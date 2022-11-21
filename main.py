@@ -4,7 +4,9 @@ class Settings:
     BACKGROUND_COLOR = pygame.Color('black')
     WINDOW_WIDTH = 800
     WINDOW_HEIGHT = 600
-
+class Map:
+    def __init__(self):
+        self.matric = []
 def main():
     pygame.init()
     pygame.font.init()
