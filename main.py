@@ -14,8 +14,14 @@ def main():
     # Основной цикл программы
     game_over = False
     while not game_over:
-        pass
-    exit(0)
+        # обработка событий
+        for event in pygame.event.get():
+            game_over = check_for_exit(event)
 
+        screen.fill(Settings.BACKGROUND_COLOR)
+        pygame.display.flip()
+    exit(0)
+def check_for_exit(event):
+    return event.type == pygame.QUIT
 if __name__ == '__main__':
     main()
