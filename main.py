@@ -9,27 +9,26 @@ class Packman:
         self.pos = pos
         self.shift = shift # то, куда пакман будет постоянно идти
         self.direction = '' # то же самое, что и сверху, но понятнее
-        self.color = pygame.Color('yellow')
-        # self.image = pygame.image.load(filename)
-        # self.rect = self.image.get_rect()
+        self.image = pygame.image.load(filename).convert()
+        self.rect = self.image.get_rect()
+        self.angle = 0
     def draw(self, screen):
-        pygame.draw.circle(screen, self.color, self.pos, 25, 0)
-    def event(self, event):
+        screen.blit(self.image, self.pos)
+    def set_angle(self, angle):
+        self.angle = 360 - self.angle
+        self.image = pygame.transform.rotate(self.image, self.angle)
+        self.angle = angle
+        self.image = pygame.transform.rotate(self.image, self.angle)
+    def set_shift_and_angle(self, key, shift, angle, event):
+        if (event.key == key):
+            self.shift = shift
+            self.set_angle(angle)
+    def event(self, event): # надо убрать дублирование кода если это возможно
         if(event.type == pygame.KEYDOWN):
-            if(event.key == pygame.K_DOWN):
-                self.shift = [0, 1]
-                self.direction = 'down'
-            if (event.key == pygame.K_UP):
-                self.shift = [0, -1]
-                self.direction = 'up'
-
-            if (event.key == pygame.K_LEFT):
-                self.shift = [-1, 0]
-                self.direction = 'left'
-
-            if (event.key == pygame.K_RIGHT):
-                self.shift = [1, 0]
-                self.direction = 'right'
+            self.set_shift_and_angle(pygame.K_DOWN, [0, 1], 270, event)
+            self.set_shift_and_angle(pygame.K_UP, [0, -1], 90, event)
+            self.set_shift_and_angle(pygame.K_LEFT, [-1, 0], 280, event)
+            self.set_shift_and_angle(pygame.K_RIGHT, [1, 0], 0, event)
 
     def move(self):
         self.pos[0] += self.shift[0]
