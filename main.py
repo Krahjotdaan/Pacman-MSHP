@@ -31,12 +31,37 @@ class Ghost:
             self.shift[0] *= -1
         if self.steps % 50 == 0:
             self.shift[0], self.shift[1] = self.shift[1], self.shift[0]
+    def move_2(self, screen):
+        self.step()
+        self.draw(screen)
+        self.steps += 1
+        if self.steps % 200 == 0:
+            self.shift[1] *= -1
+            self.shift[0] *= -1
+    def move_3(self, screen):
+        self.step()
+        self.draw(screen)
+        self.steps += 1
+        if self.steps == 80 or self.steps == 480 or self.steps == 970:
+            self.shift[0], self.shift[1] = self.shift[1], self.shift[0]
+        if self.steps == 570:
+            self.shift[1] *= -1
+            self.shift[0] *= -1
+            self.shift[0], self.shift[1] = self.shift[1], self.shift[0]
+        if self.steps == 1140:
+            self.shift[1] *= -1
+            self.shift[0] *= -1
+            self.steps = 0
 def main():
     pygame.init()
     pygame.font.init()
     screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
     ghost_1 = Ghost([530, 30],[0, 1], "ghost.png")
     ghost_1.activate()
+    ghost_2 = Ghost([50, 330], [0, 1], "ghost.png")
+    ghost_2.activate()
+    ghost_3 = Ghost([750, 500], [0, -1], "ghost.png")
+    ghost_3.activate()
     # Основной цикл программы
     game_over = False
     while not game_over:
@@ -45,6 +70,8 @@ def main():
                 game_over = True
         screen.fill(Settings.BACKGROUND_COLOR)
         ghost_1.move_1(screen)
+        ghost_2.move_2(screen)
+        ghost_3.move_3(screen)
         pygame.display.flip()
         pygame.time.wait(3)
     exit(0)
