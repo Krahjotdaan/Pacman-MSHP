@@ -52,6 +52,17 @@ class Ghost:
             self.shift[1] *= -1
             self.shift[0] *= -1
             self.steps = 0
+
+    def move_4(self, screen):
+        self.step()
+        self.draw(screen)
+        self.steps += 1
+        if (self.steps == 200 and self.shift[0] + self.shift[1] == 1) or (self.steps == 470 and self.shift[0] + self.shift[1] == -1):
+            self.shift[0], self.shift[1] = self.shift[1], self.shift[0]
+        if self.steps == 670:
+            self.shift[1] *= -1
+            self.shift[0] *= -1
+            self.steps = 0
 def main():
     pygame.init()
     pygame.font.init()
@@ -62,6 +73,8 @@ def main():
     ghost_2.activate()
     ghost_3 = Ghost([750, 500], [0, -1], "ghost.png")
     ghost_3.activate()
+    ghost_4 = Ghost([30, 30], [1, 0], "ghost.png")
+    ghost_4.activate()
     # Основной цикл программы
     game_over = False
     while not game_over:
@@ -72,6 +85,7 @@ def main():
         ghost_1.move_1(screen)
         ghost_2.move_2(screen)
         ghost_3.move_3(screen)
+        ghost_4.move_4(screen)
         pygame.display.flip()
         pygame.time.wait(3)
     exit(0)
