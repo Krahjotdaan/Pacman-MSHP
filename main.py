@@ -91,6 +91,7 @@ def main():
         visualizeGrid()
         pygame.display.flip()
     exit(0)
+
 def check_for_exit(event):
     return event.type == pygame.QUIT
 
