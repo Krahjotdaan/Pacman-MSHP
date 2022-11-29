@@ -3,6 +3,12 @@ import pygame
 gridDisplay = pygame.display.set_mode((800, 600))
 pygame.display.get_surface().fill((200, 200, 200))  # background
 
+# music
+pygame.mixer.init()
+pygame.mixer.music.load('pacman.mp3')
+pygame.mixer.music.play(-1, 0.0)
+# music
+
 matrix = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
