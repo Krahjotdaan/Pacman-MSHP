@@ -1,14 +1,16 @@
 import pygame
 
-import settings
+#import settings
 from settings import Settings
-
 from Map.map import Map
 from Map.map import visualizeGrid
+from Packman.packman import Packman
+
 my_map = Map()
 
 gridDisplay = pygame.display.set_mode((1200, 900))
 pygame.display.get_surface().fill((200, 200, 200))  # background
+packman = Packman([30,120], [0,0], "Packman/pacmanOpen.png")
 
 
 def main():
@@ -20,6 +22,9 @@ def main():
             game_over = check_for_exit(event)
         screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
         visualizeGrid()
+        packman.draw(screen)
+        packman.event(event)
+        packman.move()
         pygame.display.flip()
 
     exit(0)
