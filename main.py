@@ -4,6 +4,7 @@ import settings
 from settings import Settings
 
 from Map.map import Map
+from Map.map import visualizeGrid
 my_map = Map()
 
 gridDisplay = pygame.display.set_mode((1200, 900))
@@ -18,6 +19,7 @@ def main():
         for event in pygame.event.get():
             game_over = check_for_exit(event)
         screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
+        visualizeGrid()
         pygame.display.flip()
 
     exit(0)
