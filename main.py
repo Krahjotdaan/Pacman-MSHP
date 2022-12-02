@@ -5,12 +5,14 @@ from settings import Settings
 from Map.map import Map
 from Map.map import visualizeGrid
 from Packman.packman import Packman
+from Music.music import playMusic
 
 my_map = Map()
 
 gridDisplay = pygame.display.set_mode((1200, 900))
 pygame.display.get_surface().fill((200, 200, 200))  # background
 packman = Packman([30,120], [0,0], "Packman/pacmanOpen.png")
+playMusic('Music/pacman_music.mp3')
 
 
 def main():
