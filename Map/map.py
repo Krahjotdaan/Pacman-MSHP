@@ -1,7 +1,7 @@
 import pygame
 grid_node_width = 30
 grid_node_height = 30
-gridDisplay = pygame.display.set_mode((800, 600))
+gridDisplay = pygame.display.set_mode((1200, 900))
 pygame.display.get_surface().fill((200, 200, 200))  # background
 
 class Map():
