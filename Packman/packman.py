@@ -1,5 +1,5 @@
 import pygame
-
+from Map.map import Map
 class Packman:
     def __init__(self, pos, shift, filename):
         self.pos = pos
@@ -27,7 +27,7 @@ class Packman:
         if(event.type == pygame.KEYDOWN):
             self.set_shift_and_angle(pygame.K_DOWN, [0, 1], 270, event)
             self.set_shift_and_angle(pygame.K_UP, [0, -1], 90, event)
-            self.set_shift_and_angle(pygame.K_LEFT, [-1, 0], 280, event)
+            self.set_shift_and_angle(pygame.K_LEFT, [-1, 0], 180, event)
             self.set_shift_and_angle(pygame.K_RIGHT, [1, 0], 0, event)
 
     def move(self):
