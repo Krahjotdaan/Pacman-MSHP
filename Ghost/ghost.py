@@ -6,12 +6,12 @@ class Settings:
     WINDOW_HEIGHT = 900
 class Ghost:
     def __init__(self, pos, filename):
-        self.pos = pos
-        self.shift = [0, 0]
+        self.pos = pos #координаты
+        self.shift = [0, 0] #смещение по осям x и y
         self.image = pygame.image.load(filename)
         self.rect = self.image.get_rect()
-        self.steps = 0
-        self.dir = random.randint(1,4)
+        self.steps = 0 #количество шагов (смещений)
+        self.dir = random.randint(1,4) #направление для рандомного движения
 
     def activate(self):#возвращение к начальной позиции и настройкам призрака
         self.rect.top = self.pos[0]
@@ -148,7 +148,7 @@ def main():
     pygame.init()
     pygame.font.init()
     screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
-    ghost_1 = Ghost([480, 390], "ghost_2.png")
+    ghost_1 = Ghost([480, 390], "ghost_2.png") #создание призраков
     ghost_1.activate()
     ghost_2 = Ghost([480, 510], "ghost_2.png")
     ghost_2.activate()
@@ -156,7 +156,7 @@ def main():
     ghost_3.activate()
     ghost_4 = Ghost([660, 390], "ghost_2.png")
     ghost_4.activate()
-    out = False
+    out = False #показывает вышли призраки или нет
     # Основной цикл программы
     game_over = False
     while not game_over:
@@ -176,7 +176,7 @@ def main():
             ghost_2.move_2(screen)
             ghost_3.move_3(screen)
             ghost_4.move_4(screen)
-        if ghost_1.out_1() and ghost_2.out_2() and ghost_3.out_3() and ghost_4.out_4():
+        if ghost_1.out_1() and ghost_2.out_2() and ghost_3.out_3() and ghost_4.out_4(): #проверка что вышли все призраки
             out = True
         pygame.display.flip()
         pygame.time.wait(3)
