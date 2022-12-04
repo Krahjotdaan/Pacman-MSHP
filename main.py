@@ -23,11 +23,11 @@ def main():
             game_over = check_for_exit(event)
         screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
         my_map.visualizeGrid()
-        for sd in my_map.seeds:
-            if packman.get_position()[0] + 15 == sd.pos[0] and packman.get_position()[1] + 15 == sd.pos[1]:
-                my_map.seeds.remove(sd)
-                sd.color = (0, 0, 0)
-                sd.draw(screen)
+        # for sd in my_map.seeds:
+        #     if packman.get_position()[0] + 15 == sd.pos[0] and packman.get_position()[1] + 15 == sd.pos[1]:
+        #         my_map.seeds.remove(sd)
+        #         sd.color = (0, 0, 0)
+        #         sd.draw(screen)
         packman.draw(screen)
         packman.event(event)
         packman.move()
