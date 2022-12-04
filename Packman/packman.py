@@ -9,6 +9,9 @@ class Packman:
         self.rect = self.image.get_rect()
         self.angle = 0
 
+    def get_position(self):
+        return self.pos
+
     def draw(self, screen):
         screen.blit(self.image, self.pos)
 
