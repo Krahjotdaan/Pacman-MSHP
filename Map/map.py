@@ -43,11 +43,31 @@ class Map():
 
         self.seeds = []
 
+        y = 0
+        for row in self.matrix:
+            x = 0
+            for item in row:
+                if item == 5:
+                    s_seed = Super_seed((245, 245, 220), (x + 15, y + 15))
+                    self.seeds.append(s_seed)
+
+                elif item == 0:
+                    seed = Seed((245, 245, 220), (x + 15, y + 15))
+                    self.seeds.append(seed)
+
+                x += grid_node_width
+            y += grid_node_height
+
     def get_matrix(self):
         return self.matrix
 
     def get_seeds(self):
         return self.seeds
+
+    def draw_seeds(self):
+        for seed in self.seeds:
+            createSquare(seed.pos[0] - 15, seed.pos[1] - 15, (0, 0, 0))
+            seed.draw(gridDisplay)
 
 
     def visualizeGrid(self):
@@ -67,45 +87,12 @@ class Map():
                 elif item == 4:
                     createSquare(x, y, (255, 165, 0))  # красный - большие семечки
 
-                elif item == 5: # отрисовка больших семян
-                    createSquare(x, y, (0, 0, 0))
-                    s_seed = Super_seed((245, 245, 220), (x + 15, y + 15))
-                    s_seed.draw(gridDisplay)
-                    self.seeds.append(s_seed)
-
-                else: # отрисовка обычных семян
-                    createSquare(x, y, (0, 0, 0))
-                    seed = Seed((245, 245, 220), (x + 15, y + 15))
-                    seed.draw(gridDisplay)
-                    self.seeds.append(seed)
 
                 x += grid_node_width  # для каждого элемента в этой строке мы перемещаемся на один шаг вправо
             y += grid_node_height  # для каждой новой строки мы перемещаемся на один шаг вниз
-
-
 
 
 def createSquare(x, y, color):
     pygame.draw.rect(gridDisplay, color, [x, y, grid_node_width, grid_node_height])
 
 
-# def main():
-#     pygame.init()
-#     pygame.font.init()
-#     screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
-#
-#     # Основной цикл программы
-#     game_over = False
-#     while not game_over:
-#         # обработка событий
-#         for event in pygame.event.get():
-#             game_over = check_for_exit(event)
-#         screen.fill(Settings.BACKGROUND_COLOR)
-#         visualizeGrid()
-#         pygame.display.flip()
-#     exit(0)
-# def check_for_exit(event):
-#     return event.type == pygame.QUIT
-#
-# if __name__ == '__main__':
-#     main()
