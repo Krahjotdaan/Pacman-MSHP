@@ -1,6 +1,5 @@
 import pygame
 
-#import settings
 from settings import Settings
 from Map.map import Map
 from Packman.packman import Packman
