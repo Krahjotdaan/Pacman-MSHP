@@ -3,6 +3,7 @@ import pygame
 #shfsjkh
 from settings import Settings
 from Map.map import Map
+from Map.map import visualizeGrid
 from Packman.packman import Packman
 from Music.music import playMusic
 
@@ -22,7 +23,7 @@ def main():
         for event in pygame.event.get():
             game_over = check_for_exit(event)
         screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
-        my_map.visualizeGrid()
+        visualizeGrid()
         # for sd in my_map.seeds:
         #     if packman.get_position()[0] + 15 == sd.pos[0] and packman.get_position()[1] + 15 == sd.pos[1]:
         #         my_map.seeds.remove(sd)
