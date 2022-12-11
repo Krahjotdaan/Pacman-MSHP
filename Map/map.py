@@ -44,7 +44,7 @@ class Map():
         self.seeds = []
 
         y = 0
-        for row in self.matrix:
+        for row in self.matrix: # заполнение массива всех семок, которые находятся на карте
             x = 0
             for item in row:
                 if item == 5:
@@ -64,13 +64,13 @@ class Map():
     def get_seeds(self):
         return self.seeds
 
-    def draw_seeds(self):
+    def draw_seeds(self): # отрисовка семок на карте в соответствии с массивом семок
         for seed in self.seeds:
             createSquare(seed.pos[0] - 15, seed.pos[1] - 15, (0, 0, 0))
             seed.draw(gridDisplay)
 
 
-    def visualizeGrid(self):
+    def visualizeGrid(self): # отрисовка всего остального
         y = 0  # мы начинаем с верхней части экрана
         for row in self.matrix:
             x = 0  # для каждой строки мы снова начинаем с левой части экрана
@@ -92,7 +92,7 @@ class Map():
             y += grid_node_height  # для каждой новой строки мы перемещаемся на один шаг вниз
 
 
-def createSquare(x, y, color):
+def createSquare(x, y, color): # создание пустой карты
     pygame.draw.rect(gridDisplay, color, [x, y, grid_node_width, grid_node_height])
 
 

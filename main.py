@@ -25,14 +25,14 @@ def main():
         my_map.visualizeGrid()
         my_map.draw_seeds()
 
-        for sd in my_map.seeds:
+        for sd in my_map.seeds: # проверка того, что пакман съедает семку
             if packman.get_position()[0] + 15 == sd.pos[0] and packman.get_position()[1] + 15 == sd.pos[1]:
                 if sd.is_super == True:
                     my_map.seeds.remove(sd)
-                    score += 5
+                    score += 5 # начисление очков за большую семку
                 else:
                     my_map.seeds.remove(sd)
-                    score += 1
+                    score += 1 # начисление очков за обычную семку
 
         packman.draw(screen)
         packman.event(event)
