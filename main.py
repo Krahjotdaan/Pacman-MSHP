@@ -34,7 +34,6 @@ def main():
                     my_map.seeds.remove(sd)
                     score += 1 # начисление очков за обычную семку
 
-
         packman.draw(screen)
         packman.event(event)
         packman.move()

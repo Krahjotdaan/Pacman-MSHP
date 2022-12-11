@@ -76,21 +76,11 @@ class Map():
     def get_matrix(self):
         return self.matrix
 
-
     def get_seeds(self):
         return self.seeds
 
-    def draw_seeds(self):
-        for seed in self.seeds:
-            self.createSquare(seed.pos[0] - 15, seed.pos[1] - 15, (0, 0, 0))
-            seed.draw(gridDisplay)
-
-    def is_super(self):
-
-
     def createSquare(self, x, y, color):
         pygame.draw.rect(gridDisplay, color, [x, y, grid_node_width, grid_node_height])
-
 
     def visualizeGrid(self):
         y = 0  # мы начинаем с верхней части экрана
@@ -105,8 +95,6 @@ class Map():
                     self.createSquare(x, y, (255, 165, 0)) # блок, через который не может пройти пакмэн, но могут пройти призраки
                 else:
                     self.createSquare(x, y, (0, 0, 0))
-
-
                 x += grid_node_width  # для каждого элемента в этой строке мы перемещаемся на один шаг вправо
             y += grid_node_height  # для каждой новой строки мы перемещаемся на один шаг вниз
 
