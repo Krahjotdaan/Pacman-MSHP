@@ -37,17 +37,3 @@ class Packman:
         self.pos[0] += self.shift[0]
         self.pos[1] += self.shift[1]
 
-# def main():
-#     pygame.init()
-#     pygame.font.init()
-#     screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
-#
-#
-#     # Основной цикл программы
-#     game_over = False
-#     while not game_over:
-#         pass
-#     exit(0)
-#
-# if __name__ == '__main__':
-#     main()

@@ -60,11 +60,9 @@ class Map():
                 if item == 5:
                     s_seed = Super_seed((245, 245, 220), (x + 15, y + 15)) # супер семечко
                     self.seeds.append(s_seed)
-
                 elif item == 0:
                     seed = Seed((245, 245, 220), (x + 15, y + 15)) # семечки
                     self.seeds.append(seed)
-
                 x += grid_node_width
             y += grid_node_height
 
@@ -97,25 +95,4 @@ class Map():
                     self.createSquare(x, y, (0, 0, 0))
                 x += grid_node_width  # для каждого элемента в этой строке мы перемещаемся на один шаг вправо
             y += grid_node_height  # для каждой новой строки мы перемещаемся на один шаг вниз
-
-# def main():
-#     pygame.init()
-#     pygame.font.init()
-#     screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
-#
-#     # Основной цикл программы
-#     game_over = False
-#     while not game_over:
-#         # обработка событий
-#         for event in pygame.event.get():
-#             game_over = check_for_exit(event)
-#         screen.fill(Settings.BACKGROUND_COLOR)
-#         visualizeGrid()
-#         pygame.display.flip()
-#     exit(0)
-# def check_for_exit(event):
-#     return event.type == pygame.QUIT
-#
-# if __name__ == '__main__':
-#     main()
 
