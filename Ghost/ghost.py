@@ -143,4 +143,31 @@ class Ghost:
 
 #################################################################################
 #Реализация в мэин
+    def ghosts_move_random(list_ghosts, screen):
+        for ghost in list_ghosts:
+            ghost.move_random(screen)
+
+    def ghosts_out(list_ghosts):
+        if list_ghosts[0].out_1() and list_ghosts[1].out_2() and list_ghosts[2].out_3() and list_ghosts[3].out_4():  # проверка что вышли все призраки
+            return True
+        else:
+            return False
+
+    def move_xy(list_ghosts,screen):
+        list_ghosts[0].move_1(screen)
+        list_ghosts[1].move_2(screen)
+        list_ghosts[2].move_3(screen)
+        list_ghosts[3].move_4(screen)
+
+    def creating_ghosts():
+        ghost_1 = Ghost([480, 390], "Ghost/ghost_2.png")  # создание призраков
+        ghost_2 = Ghost([480, 510], "Ghost/ghost_2.png")
+        ghost_3 = Ghost([660, 510], "Ghost/ghost_2.png")
+        ghost_4 = Ghost([660, 390], "Ghost/ghost_2.png")
+        list_ghosts = [ghost_1, ghost_2, ghost_3, ghost_4]
+        return list_ghosts
+
+    def gosts_activate(list_ghosts):
+        for ghost in list_ghosts:
+            ghost.activate()
 

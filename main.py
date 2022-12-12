@@ -21,7 +21,9 @@ def main():
     game_over = False
     score = 0
 
-    list_ghosts = creating_ghosts()
+    list_ghosts = Ghost.creating_ghosts()
+    Ghost.gosts_activate(list_ghosts)
+
     out = False  # показывает вышли призраки или нет
     # Основной цикл программы
 
@@ -46,11 +48,11 @@ def main():
 
 ########ПРИЗРАКИ#################################################################
         if out:  # если все призраки вышли
-            ghosts_move_random(list_ghosts, screen)
+            Ghost.ghosts_move_random(list_ghosts, screen)
             out = True
         else:
-            move_xy(list_ghosts, screen)
-        if ghosts_out(list_ghosts):  # проверка что вышли все призраки
+            Ghost.move_xy(list_ghosts, screen)
+        if Ghost.ghosts_out(list_ghosts):  # проверка что вышли все призраки
             out = True
         pygame.time.wait(3)
 #################################################################################
@@ -63,31 +65,6 @@ def main():
 #################################################################################
     exit(0)
 
-def ghosts_move_random(list_ghosts, screen):
-    for ghost in list_ghosts:
-        ghost.move_random(screen)
-
-def ghosts_out(list_ghosts):
-    if list_ghosts[0].out_1() and list_ghosts[1].out_2() and list_ghosts[2].out_3() and list_ghosts[3].out_4():  # проверка что вышли все призраки
-        return True
-    else:
-        return False
-
-def move_xy(list_ghosts,screen):
-    list_ghosts[0].move_1(screen)
-    list_ghosts[1].move_2(screen)
-    list_ghosts[2].move_3(screen)
-    list_ghosts[3].move_4(screen)
-
-def creating_ghosts():
-    ghost_1 = Ghost([480, 390], "Ghost/ghost_2.png")  # создание призраков
-    ghost_2 = Ghost([480, 510], "Ghost/ghost_2.png")
-    ghost_3 = Ghost([660, 510], "Ghost/ghost_2.png")
-    ghost_4 = Ghost([660, 390], "Ghost/ghost_2.png")
-    list_ghosts = [ghost_1, ghost_2, ghost_3, ghost_4]
-    for ghost in list_ghosts:
-        ghost.activate()
-    return list_ghosts
 
 
 
