@@ -1,5 +1,6 @@
 import pygame
 import random
+from Nemap import Map
 class Settings:
     BACKGROUND_COLOR = pygame.Color('black')
     WINDOW_WIDTH = 1200
@@ -8,15 +9,17 @@ class Ghost:
     def __init__(self, pos, filename):
         self.pos = pos #координаты
         self.shift = [0, 0] #смещение по осям x и y
+        self.shift_matrix = [0, 0]
         self.image = pygame.image.load(filename)
         self.rect = self.image.get_rect()
         self.steps = 0 #количество шагов (смещений)
         self.dir = random.randint(1,4) #направление для рандомного движения
-
+        self.pos_matrix = [pos[0]//30, pos[1]//30]
     def activate(self):#возвращение к начальной позиции и настройкам призрака
         self.rect.top = self.pos[0]
         self.rect.left = self.pos[1]
         self.steps = 0
+        self.steps_matrix = 0
         self.shift = [0, 0]
 
     def draw(self, screen):#отрисовка
@@ -26,6 +29,10 @@ class Ghost:
         self.rect.top += self.shift[0]
         self.rect.left += self.shift[1]
         self.steps += 1
+        if self.steps % 30 == 0:
+            self.pos_matrix[0] += self.shift_matrix[0]
+            self.pos_matrix[0] += self.shift_matrix[0]
+            self.steps_matrix += 1
 
     def move_left(self):#движение влево
         self.shift[0] = -1
@@ -52,54 +59,56 @@ class Ghost:
 
     def move_1(self, screen):#движение к выходу из прямоугольника для 1 призрака
         self.draw(screen)
-        if self.steps < 90:
+        if self.steps_matrix < 3:
             self.move_right()
-        elif (self.steps >= 90) and (self.steps < 110):
+        elif (self.steps_matrix >= 3) and (self.steps_matrix < 5):
             self.move_up()
-        elif self.steps == 110:
+        elif self.steps_matrix == 5:
             self.stop()
 
     def move_2(self, screen):#движение к выходу из прямоугольника для 2 призрака
         self.draw(screen)
-        if self.steps < 120:
+        if self.steps_matrix < 4:
             self.move_up()
-        elif (self.steps >= 120) and (self.steps < 210):
+        elif (self.steps_matrix >= 4) and (self.steps_matrix < 7):
             self.move_right()
-        elif (self.steps >= 210) and (self.steps < 230):
+        elif (self.steps_matrix >= 7) and (self.steps_matrix < 9):
             self.move_up()
-        elif self.steps == 230:
+        elif self.steps_matrix == 9:
             self.stop()
 
     def move_3(self, screen):#движение к выходу из прямоугольника для 3 призрака
         self.draw(screen)
-        if self.steps < 180:
+
+        if self.steps_matrix < 6:
             self.move_left()
-        elif (self.steps >= 180) and (self.steps < 300):
+        elif (self.steps_matrix >= 6) and (self.steps_matrix < 10):
             self.move_up()
-        elif (self.steps >= 300) and (self.steps < 390):
+        elif (self.steps_matrix >= 10) and (self.steps_matrix < 13):
             self.move_right()
-        elif (self.steps >= 390) and (self.steps < 410):
+        elif (self.steps_matrix >= 13) and (self.steps_matrix < 15):
             self.move_up()
-        elif self.steps == 410:
+        elif self.steps_matrix == 15:
             self.stop()
+            print(self.steps_matrix)
 
     def move_4(self, screen):#движение к выходу из прямоугольника для 4 призрака
         self.draw(screen)
-        if self.steps < 120:
+        if self.steps_matrix < 4:
             self.move_down()
-        elif (self.steps >= 120) and (self.steps < 300):
+        elif (self.steps_matrix >= 4) and (self.steps_matrix < 10):
             self.move_left()
-        elif (self.steps >= 300) and (self.steps < 420):
+        elif (self.steps_matrix >= 10) and (self.steps_matrix < 14):
             self.move_up()
-        elif (self.steps >= 420) and (self.steps < 510):
+        elif (self.steps_matrix >= 14) and (self.steps_matrix < 17):
             self.move_right()
-        elif (self.steps >= 510) and (self.steps < 530):
+        elif (self.steps_matrix >= 17) and (self.steps_matrix < 19):
             self.move_up()
-        elif self.steps == 530:
+        elif self.steps_matrix == 19:
             self.stop()
 
     def out_1(self):#проверка вышел ли 1 призрак
-        if self.steps == 110:
+        if self.steps_matrix == 5:
             return True
         else:
             return False
@@ -126,19 +135,19 @@ class Ghost:
             self.move_right()
 
     def out_2(self):#проверка вышел ли 2 призрак
-        if self.steps == 230:
+        if self.steps_matrix == 9:
             return True
         else:
             return False
 
     def out_3(self):#проверка вышел ли 3 призрак
-        if self.steps == 410:
+        if self.steps_matrix == 15:
             return True
         else:
             return False
 
     def out_4(self):#проверка вышел ли 4 призрак
-        if self.steps == 530:
+        if self.steps_matrix == 19:
             return True
         else:
             return False
@@ -158,13 +167,15 @@ def main():
     ghost_4.activate()
     out = False #показывает вышли призраки или нет
     # Основной цикл программы
+    map = Map()
     game_over = False
     while not game_over:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
         screen.fill(Settings.BACKGROUND_COLOR)
-
+        #pygame.display.get_surface().fill((200, 200, 200))
+        map.visualizeGrid()
         if out:#если все призраки вышли
             ghost_1.move_random(screen)
             ghost_2.move_random(screen)
@@ -178,6 +189,7 @@ def main():
             ghost_4.move_4(screen)
         if ghost_1.out_1() and ghost_2.out_2() and ghost_3.out_3() and ghost_4.out_4(): #проверка что вышли все призраки
             out = True
+
         pygame.display.flip()
         pygame.time.wait(3)
     exit(0)
