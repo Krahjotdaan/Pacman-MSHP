@@ -8,11 +8,15 @@ from Packman.packman import Packman
 from Music.music import playMusic
 
 my_map = Map()
-
+my_map.activate()
+# for row in my_map.collision_matrix:
+#     for item in row:
+#         print(item, end=' ')
+#     print()
 gridDisplay = pygame.display.set_mode((1200, 900))
 pygame.display.get_surface().fill((200, 200, 200))  # background
 packman = Packman([30,120], [0,0], "Packman/pacmanOpen.png")
-playMusic('Music/pacman_music.mp3')
+# playMusic('Music/pacman_music.mp3')
 
 
 def main():
@@ -32,6 +36,7 @@ def main():
         packman.draw(screen)
         packman.event(event)
         packman.move()
+        packman.logic(my_map.collision_matrix)
         pygame.display.flip()
 
     exit(0)

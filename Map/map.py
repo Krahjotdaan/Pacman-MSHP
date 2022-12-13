@@ -6,9 +6,12 @@ import pygame
 # 2 - территория на которой не спавнятся семечки (там будет находиться счет)
 # 3 - стена, через которую выходят призраки, но не может пройти пакмэн
 # 5 - супер семечко
+grid_node_width = 30
+grid_node_height = 30
+gridDisplay = pygame.display.set_mode((1200, 900))
 
 class Map():
-    matrix = [[]]
+    # matrix = [[]]
 
     def __init__(self):
         self.matrix = [
@@ -42,14 +45,30 @@ class Map():
         [1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
+        self.collision_matrix = self.matrix.copy()
+    def activate(self):
+        y = 0  # мы начинаем с верхней части экрана
+        for row in range(30):
+            x = 0  # для каждой строки мы снова начинаем с левой части экрана
+            square = pygame.Rect(x, y, 30, 30)
+            for item in range(40):
+                if Map().matrix[row][item] == 1:
+                    self.collision_matrix[row][item] = square  # синий - стенки
+                # elif Map().matrix[item][row] == 2:
+                #     createSquare(x, y,
+                #                  (0, 0, 0))  # блок, через который не может пройти пакмэн, но могут пройти призраки
+                # elif Map().matrix[item][row] == 3:
+                #     createSquare(x, y,
+                #                  (255, 165, 0))  # блок, через который не может пройти пакмэн, но могут пройти призраки
+                # else:
+                #     createSquare(x, y, (0, 0, 0))
 
-grid_node_width = 30
-grid_node_height = 30
-gridDisplay = pygame.display.set_mode((1200, 900))
+                x += grid_node_width  # для каждого элемента в этой строке мы перемещаемся на один шаг вправо
+            y += grid_node_height  # для каждой новой строки мы перемещаемся на один шаг вниз
 
+map = Map()
 def createSquare(x, y, color):
     pygame.draw.rect(gridDisplay, color, [x, y, grid_node_width, grid_node_height])
-
 
 def visualizeGrid():
     y = 0  # мы начинаем с верхней части экрана
@@ -62,12 +81,11 @@ def visualizeGrid():
                 createSquare(x, y, (0, 0, 0))  # блок, через который не может пройти пакмэн, но могут пройти призраки
             elif item == 3:
                 createSquare(x, y, (255, 165, 0)) # блок, через который не может пройти пакмэн, но могут пройти призраки
-            else:
-                createSquare(x, y, (0, 0, 0))
+            # else:
+            #     createSquare(x, y, (0, 0, 0))
 
             x += grid_node_width  # для каждого элемента в этой строке мы перемещаемся на один шаг вправо
         y += grid_node_height  # для каждой новой строки мы перемещаемся на один шаг вниз
-    pygame.display.update()
 
 
 # def main():
