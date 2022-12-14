@@ -53,7 +53,7 @@ class Map():
         return self.matrix
 
     def createSquare(self, x, y, color):
-        pygame.draw.rect(gridDisplay, color, [x, y, grid_node_width, grid_node_height], 1)
+        pygame.draw.rect(gridDisplay, color, [x, y, grid_node_width, grid_node_height])
 
     def visualizeGrid(self):
         y = 0  # мы начинаем с верхней части экрана
@@ -70,6 +70,11 @@ class Map():
                     self.createSquare(x, y, (0, 0, 0))
                 x += grid_node_width  # для каждого элемента в этой строке мы перемещаемся на один шаг вправо
             y += grid_node_height  # для каждой новой строки мы перемещаемся на один шаг вниз
+    def is_wall(self, x, y):
+        if self.matrix[x-1][y-1] == 1 or self.matrix[x-1][y-1] == 3:
+            return True
+        else:
+            return False
 def check_for_exit(event):
     return event.type == pygame.QUIT
 

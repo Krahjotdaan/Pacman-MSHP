@@ -8,18 +8,20 @@ class Settings:
 class Ghost:
     def __init__(self, pos, filename):
         self.pos = pos #координаты
+        self.pos_matrix = [pos[0]//30+1, pos[1]//30+1]# координаты по матрице
         self.shift = [0, 0] #смещение по осям x и y
-        self.shift_matrix = [0, 0]
+        self.shift_matrix = [0, 0]# смещение по матрице
         self.image = pygame.image.load(filename)
         self.rect = self.image.get_rect()
-        self.steps = 0 #количество шагов (смещений)
-        self.dir = random.randint(1,4) #направление для рандомного движения
-        self.pos_matrix = [pos[0]//30, pos[1]//30]
+        self.steps = 0 # количество шагов (смещений)
+        self.steps_matrix = 0 # количество шагов (смещений) по матрице
+        self.dir = 0 #направление для рандомного движения
+
     def activate(self):#возвращение к начальной позиции и настройкам призрака
         self.rect.top = self.pos[0]
         self.rect.left = self.pos[1]
         self.steps = 0
-        self.steps_matrix = 0
+
         self.shift = [0, 0]
 
     def draw(self, screen):#отрисовка
@@ -31,31 +33,45 @@ class Ghost:
         self.steps += 1
         if self.steps % 30 == 0:
             self.pos_matrix[0] += self.shift_matrix[0]
-            self.pos_matrix[0] += self.shift_matrix[0]
+            self.pos_matrix[1] += self.shift_matrix[1]
             self.steps_matrix += 1
 
     def move_left(self):#движение влево
         self.shift[0] = -1
         self.shift[1] = 0
+        self.shift_matrix[0] = -1
+        self.shift_matrix[1] = 0
         self.step()
+        self.dir = 3
 
     def move_right(self):#движение вправо
         self.shift[0] = 1
         self.shift[1] = 0
+        self.shift_matrix[0] = 1
+        self.shift_matrix[1] = 0
         self.step()
+        self.dir = 4
 
     def move_up(self):#движение вверх
         self.shift[0] = 0
         self.shift[1] = -1
+        self.shift_matrix[0] = 0
+        self.shift_matrix[1] = -1
         self.step()
+        self.dir = 1
 
     def move_down(self):#движение вниз
         self.shift[0] = 0
         self.shift[1] = 1
+        self.shift_matrix[0] = 0
+        self.shift_matrix[1] = 1
         self.step()
+        self.dir = 2
 
     def stop(self):#движение остановка
         self.shift = [0, 0]
+        self.shift_matrix = [0, 0]
+        self.dir = 0
 
     def move_1(self, screen):#движение к выходу из прямоугольника для 1 призрака
         self.draw(screen)
@@ -90,7 +106,6 @@ class Ghost:
             self.move_up()
         elif self.steps_matrix == 15:
             self.stop()
-            print(self.steps_matrix)
 
     def move_4(self, screen):#движение к выходу из прямоугольника для 4 призрака
         self.draw(screen)
@@ -113,26 +128,50 @@ class Ghost:
         else:
             return False
 
-    def move_random(self, screen):#изменение направления движения рандомно
-        if self.steps % 120 == 0:
-            self.dir = random.randint(1, 4)
-        self.direction(screen, self.dir)
+    #НОВАЯ ФУНКЦИЯ ДВИЖЕНИЯ + КОЛЛЛИЗИЯ СО СТЕНКАМИ
+    def move_random(self, screen, map):#изменение направления движения рандомно
+        dirs = []
+        change_dir = False
+        if self.rect.top == (self.pos_matrix[0]-1)*30 and self.rect.left == (self.pos_matrix[1]-1)*30:
+            if not map.is_wall(self.pos_matrix[1]-1, self.pos_matrix[0]):
+                dirs.append(1)
+            if not map.is_wall(self.pos_matrix[1]+1, self.pos_matrix[0]):
+                dirs.append(2)
+            if not map.is_wall(self.pos_matrix[1], self.pos_matrix[0]-1):
+                dirs.append(3)
+            if not map.is_wall(self.pos_matrix[1], self.pos_matrix[0]+1):
+                dirs.append(4)
+            change_dir = True
+            if self.dir != 0:
+                for i in range(len(dirs)):
+                    if self.dir == dirs[i]:
+                        change_dir = False
+                        break
+        else:
+            dirs.append(0)
 
-    def direction(self, screen, rand):#движение рандомно
-        if rand == 1:
+        if change_dir or len(dirs)==3:
             self.draw(screen)
-            self.move_up()
-        if rand == 2:
+            index_dir = random.randint(0, len(dirs)-1)
+            if dirs[index_dir] == 1:
+                self.move_up()
+            elif dirs[index_dir] == 2:
+                self.move_down()
+            elif dirs[index_dir] == 3:
+                self.move_left()
+            elif dirs[index_dir] == 4:
+                self.move_right()
+        else:
             self.draw(screen)
-            self.move_down()
+            if self.dir == 1:
+                self.move_up()
+            elif self.dir == 2:
+                self.move_down()
+            elif self.dir == 3:
+                self.move_left()
+            elif self.dir == 4:
+                self.move_right()
 
-        if rand == 3:
-            self.draw(screen)
-            self.move_left()
-
-        if rand == 4:
-            self.draw(screen)
-            self.move_right()
 
     def out_2(self):#проверка вышел ли 2 призрак
         if self.steps_matrix == 9:
@@ -157,6 +196,8 @@ def main():
     pygame.init()
     pygame.font.init()
     screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
+
+    # НАЧАЛЬНЫЕ КООРДИНАТЫ ИЗМЕНИЛИСЬ
     ghost_1 = Ghost([480, 390], "ghost_2.png") #создание призраков
     ghost_1.activate()
     ghost_2 = Ghost([480, 510], "ghost_2.png")
@@ -167,20 +208,24 @@ def main():
     ghost_4.activate()
     out = False #показывает вышли призраки или нет
     # Основной цикл программы
+
+    #КАРТА ДЛЯ ПРИЗРАКОВ
     map = Map()
+
     game_over = False
     while not game_over:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
         screen.fill(Settings.BACKGROUND_COLOR)
-        #pygame.display.get_surface().fill((200, 200, 200))
-        map.visualizeGrid()
+        #map.visualizeGrid()
+
+        #ПАРАМЕТРЫ ФУНКЦИИ move_random() ИЗМЕНИЛИСЬ
         if out:#если все призраки вышли
-            ghost_1.move_random(screen)
-            ghost_2.move_random(screen)
-            ghost_3.move_random(screen)
-            ghost_4.move_random(screen)
+            ghost_1.move_random(screen, map)
+            ghost_2.move_random(screen, map)
+            ghost_3.move_random(screen, map)
+            ghost_4.move_random(screen, map)
             out = True
         else:
             ghost_1.move_1(screen)
@@ -191,8 +236,8 @@ def main():
             out = True
 
         pygame.display.flip()
-        pygame.time.wait(3)
+        pygame.time.wait(6)
     exit(0)
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
