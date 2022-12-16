@@ -37,6 +37,7 @@ class Packman:
         if matrix[self.pos[1] // 30][self.pos[0] // 30] == 1 or matrix[(self.pos[1] + 25) // 30][(self.pos[0] + 25) // 30] == 1 or matrix[(self.pos[1] + 25) // 30][(self.pos[0]) // 30] == 1 or matrix[(self.pos[1]) // 30][(self.pos[0] + 25) // 30] == 1:
             self.pos = [self.pos[0] - self.shift[0], self.pos[1] - self.shift[1]] # отодвинуть пакмана назад при коллизии с клеткой
             self.shift = [0, 0]
+        self.move()
 
     def move(self):
         self.pos[0] += self.shift[0]

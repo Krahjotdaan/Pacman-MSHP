@@ -48,8 +48,8 @@ class Ghost:
     def stop(self):#движение остановка
         self.shift = [0, 0]
 
-    def move_1(self, screen):#движение к выходу из прямоугольника для 1 призрака
-        self.draw(screen)
+    def move_1(self):#движение к выходу из прямоугольника для 1 призрака
+        # self.draw(screen)
         if self.steps < 90:
             self.move_right()
         elif (self.steps >= 90) and (self.steps < 110):
@@ -57,8 +57,8 @@ class Ghost:
         elif self.steps == 110:
             self.stop()
 
-    def move_2(self, screen):#движение к выходу из прямоугольника для 2 призрака
-        self.draw(screen)
+    def move_2(self):#движение к выходу из прямоугольника для 2 призрака
+        # self.draw(screen)
         if self.steps < 120:
             self.move_up()
         elif (self.steps >= 120) and (self.steps < 210):
@@ -68,8 +68,8 @@ class Ghost:
         elif self.steps == 230:
             self.stop()
 
-    def move_3(self, screen):#движение к выходу из прямоугольника для 3 призрака
-        self.draw(screen)
+    def move_3(self):#движение к выходу из прямоугольника для 3 призрака
+        # self.draw(screen)
         if self.steps < 180:
             self.move_left()
         elif (self.steps >= 180) and (self.steps < 300):
@@ -81,8 +81,8 @@ class Ghost:
         elif self.steps == 410:
             self.stop()
 
-    def move_4(self, screen):#движение к выходу из прямоугольника для 4 призрака
-        self.draw(screen)
+    def move_4(self):#движение к выходу из прямоугольника для 4 призрака
+        # self.draw(screen)
         if self.steps < 120:
             self.move_down()
         elif (self.steps >= 120) and (self.steps < 300):
@@ -96,56 +96,45 @@ class Ghost:
         elif self.steps == 530:
             self.stop()
 
-    def out_1(self):#проверка вышел ли 1 призрак
-        if self.steps == 110:
-            return True
-        else:
-            return False
 
-    def move_random(self, screen):#изменение направления движения рандомно
+
+    def move_random(self):#изменение направления движения рандомно
         if self.steps % 120 == 0:
             self.dir = random.randint(1, 4)
-        self.direction(screen, self.dir)
+        self.direction(self.dir)
 
-    def direction(self, screen, rand):#движение рандомно
+    def direction(self, rand):#движение рандомно
         if rand == 1:
-            self.draw(screen)
+            # self.draw(screen)
             self.move_up()
         if rand == 2:
-            self.draw(screen)
+            # self.draw(screen)
             self.move_down()
 
         if rand == 3:
-            self.draw(screen)
+            # self.draw(screen)
             self.move_left()
 
         if rand == 4:
-            self.draw(screen)
+            # self.draw(screen)
             self.move_right()
 
+    def out_1(self):#проверка вышел ли 1 призрак
+        return self.steps == 110
     def out_2(self):#проверка вышел ли 2 призрак
-        if self.steps == 230:
-            return True
-        else:
-            return False
+        return self.steps == 230
 
     def out_3(self):#проверка вышел ли 3 призрак
-        if self.steps == 410:
-            return True
-        else:
-            return False
+        return self.steps == 410
 
     def out_4(self):#проверка вышел ли 4 призрак
-        if self.steps == 530:
-            return True
-        else:
-            return False
+        return self.steps == 530
 
 #################################################################################
 #Реализация в мэин
-    def ghosts_move_random(list_ghosts, screen):
+    def ghosts_move_random(list_ghosts):
         for ghost in list_ghosts:
-            ghost.move_random(screen)
+            ghost.move_random()
 
     def ghosts_out(list_ghosts):
         if list_ghosts[0].out_1() and list_ghosts[1].out_2() and list_ghosts[2].out_3() and list_ghosts[3].out_4():  # проверка что вышли все призраки
@@ -153,11 +142,11 @@ class Ghost:
         else:
             return False
 
-    def move_xy(list_ghosts,screen):
-        list_ghosts[0].move_1(screen)
-        list_ghosts[1].move_2(screen)
-        list_ghosts[2].move_3(screen)
-        list_ghosts[3].move_4(screen)
+    def move_xy(list_ghosts):
+        list_ghosts[0].move_1()
+        list_ghosts[1].move_2()
+        list_ghosts[2].move_3()
+        list_ghosts[3].move_4()
 
     def creating_ghosts():
         ghost_1 = Ghost([480, 390], "Ghost/ghost_2.png")  # создание призраков
