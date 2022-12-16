@@ -6,14 +6,14 @@ class Packman:
         self.shift = shift # то, куда пакман будет постоянно идти
         self.direction = '' # то же самое, что и сверху, но понятнее
         self.image = pygame.image.load(filename).convert()
-        self.rect = self.image.get_rect()
+        self.rect = pygame.Rect(pos[0], pos[1], 25, 25)
         self.angle = 0
 
     def get_position(self):
         return self.pos
 
     def draw(self, screen):
-        screen.blit(self.image, self.pos)
+        screen.blit(self.image, self.rect)
 
     def set_angle(self, angle):
         self.angle = 360 - self.angle
@@ -33,7 +33,13 @@ class Packman:
             self.set_shift_and_angle(pygame.K_LEFT, [-1, 0], 180, event)
             self.set_shift_and_angle(pygame.K_RIGHT, [1, 0], 0, event)
 
+    def logic(self, matrix):
+        if matrix[self.pos[1] // 30][self.pos[0] // 30] == 1 or matrix[(self.pos[1] + 25) // 30][(self.pos[0] + 25) // 30] == 1 or matrix[(self.pos[1] + 25) // 30][(self.pos[0]) // 30] == 1 or matrix[(self.pos[1]) // 30][(self.pos[0] + 25) // 30] == 1:
+            self.pos = [self.pos[0] - self.shift[0], self.pos[1] - self.shift[1]] # отодвинуть пакмана назад при коллизии с клеткой
+            self.shift = [0, 0]
+
     def move(self):
         self.pos[0] += self.shift[0]
         self.pos[1] += self.shift[1]
+        self.rect = pygame.Rect(self.pos[0], self.pos[1], 25, 25)
 

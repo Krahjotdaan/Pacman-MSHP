@@ -7,7 +7,10 @@ from Music.music import playMusic
 from Ghost.ghost import Ghost
 
 my_map = Map()
-
+# for row in my_map.collision_matrix:
+#     for item in row:
+#         print(item, end=' ')
+#     print()
 gridDisplay = pygame.display.set_mode((1200, 900))
 pygame.display.get_surface().fill((200, 200, 200))  # background
 packman = Packman([30, 120], [0, 0], "Packman/pacmanOpen.png")
@@ -61,6 +64,7 @@ def main():
         packman.draw(screen)
         packman.event(event)
         packman.move()
+        packman.logic(my_map.matrix)
         pygame.display.flip()
 #################################################################################
     exit(0)

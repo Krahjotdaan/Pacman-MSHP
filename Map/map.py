@@ -79,7 +79,6 @@ class Map():
 
     def createSquare(self, x, y, color):
         pygame.draw.rect(gridDisplay, color, [x, y, grid_node_width, grid_node_height])
-
     def visualizeGrid(self):
         y = 0  # мы начинаем с верхней части экрана
         for row in self.matrix:
