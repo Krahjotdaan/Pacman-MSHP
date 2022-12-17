@@ -16,13 +16,15 @@ class Ghost:
         self.steps = 0 # количество шагов (смещений)
         self.steps_matrix = 0 # количество шагов (смещений) по матрице
         self.dir = 0 #направление для рандомного движения
-
+        self.chasing = False
     def activate(self):#возвращение к начальной позиции и настройкам призрака
         self.rect.top = self.pos[0]
         self.rect.left = self.pos[1]
+        self.pos_matrix = [self.pos[0] // 30 + 1, self.pos[1] // 30 + 1]
         self.steps = 0
-
+        self.steps_matrix = 0
         self.shift = [0, 0]
+        self.chasing = False
 
     def draw(self, screen):#отрисовка
         screen.blit(self.image, [self.rect.top, self.rect.left])
@@ -119,6 +121,7 @@ class Ghost:
             self.move_right()
         elif (self.steps_matrix >= 17) and (self.steps_matrix < 19):
             self.move_up()
+
         elif self.steps_matrix == 19:
             self.stop()
 
@@ -150,7 +153,7 @@ class Ghost:
         else:
             dirs.append(0)
 
-        if change_dir or len(dirs)==3:
+        if (change_dir or len(dirs)==3):
             self.draw(screen)
             index_dir = random.randint(0, len(dirs)-1)
             if dirs[index_dir] == 1:
@@ -191,53 +194,141 @@ class Ghost:
         else:
             return False
 
+    def distance(self, pacman):
+        delta_x = self.pos_matrix[0] - pacman.pos_matrix[0]
+        delta_y = self.pos_matrix[1] - pacman.pos_matrix[1]
+        return int(((abs(delta_x))**2+(abs(delta_y))**2)**0.5)
+    def distance_x(self, pacman):
+        return abs(self.rect.top - pacman.rect.top)
+    def distance_y(self, pacman):
+        return abs(self.rect.left - pacman.rect.left)
 
-def main():
-    pygame.init()
-    pygame.font.init()
-    screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
+    def chase(self, pacman, map):
+        self.chasing = True
+        dirs = []
+        if self.rect.top == (self.pos_matrix[0] - 1) * 30 and self.rect.left == (self.pos_matrix[1] - 1) * 30:
+            if not map.is_wall(self.pos_matrix[1] - 1, self.pos_matrix[0]):
+                dirs.append(1)
+            if not map.is_wall(self.pos_matrix[1] + 1, self.pos_matrix[0]):
+                dirs.append(2)
+            if not map.is_wall(self.pos_matrix[1], self.pos_matrix[0] - 1):
+                dirs.append(3)
+            if not map.is_wall(self.pos_matrix[1], self.pos_matrix[0] + 1):
+                dirs.append(4)
+            if self.rect.top > pacman.rect.top:
 
-    # НАЧАЛЬНЫЕ КООРДИНАТЫ ИЗМЕНИЛИСЬ
-    ghost_1 = Ghost([480, 390], "ghost_2.png") #создание призраков
-    ghost_1.activate()
-    ghost_2 = Ghost([480, 510], "ghost_2.png")
-    ghost_2.activate()
-    ghost_3 = Ghost([660, 510], "ghost_2.png")
-    ghost_3.activate()
-    ghost_4 = Ghost([660, 390], "ghost_2.png")
-    ghost_4.activate()
-    out = False #показывает вышли призраки или нет
-    # Основной цикл программы
+                for i in range(len(dirs)):
+                    if dirs[i] == 3:
 
-    #КАРТА ДЛЯ ПРИЗРАКОВ
-    map = Map()
+                        return 3
+            elif self.rect.top < pacman.rect.top:
 
-    game_over = False
-    while not game_over:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_over = True
-        screen.fill(Settings.BACKGROUND_COLOR)
-        #map.visualizeGrid()
+                for i in range(len(dirs)):
+                    if dirs[i] == 4:
 
-        #ПАРАМЕТРЫ ФУНКЦИИ move_random() ИЗМЕНИЛИСЬ
-        if out:#если все призраки вышли
-            ghost_1.move_random(screen, map)
-            ghost_2.move_random(screen, map)
-            ghost_3.move_random(screen, map)
-            ghost_4.move_random(screen, map)
-            out = True
+                        return 4
+
+            elif self.rect.left > pacman.rect.left:
+
+                for i in range(len(dirs)):
+                    if dirs[i] == 1:
+
+                        return 1
+            elif self.rect.left < pacman.rect.left:
+
+                for i in range(len(dirs)):
+                    if dirs[i] == 2:
+
+                        return 2
+            else:
+                return self.dir
         else:
-            ghost_1.move_1(screen)
-            ghost_2.move_2(screen)
-            ghost_3.move_3(screen)
-            ghost_4.move_4(screen)
-        if ghost_1.out_1() and ghost_2.out_2() and ghost_3.out_3() and ghost_4.out_4(): #проверка что вышли все призраки
-            out = True
+            return self.dir
 
-        pygame.display.flip()
-        pygame.time.wait(6)
-    exit(0)
+def check(Ghosts, pacman, map, timer):
 
-# if __name__ == '__main__':
-#     main()
+    min_dist = 10000
+    min_index = 0
+    for i in range(len(Ghosts)):
+        if Ghosts[i].distance(pacman) < min_dist:
+            min_dist = Ghosts[i].distance(pacman)
+            min_index = i
+    if min_dist <= 5 or Ghosts[min_index].chasing:
+        Ghosts[min_index].dir = Ghosts[min_index].chase(pacman, map)
+        timer += 1
+    return timer
+
+def end_chasing(timer, Ghosts):
+    if timer >= 1000:
+        for i in range(len(Ghosts)):
+            if Ghosts[i].chasing == True:
+                Ghosts[i].chasing = False
+        return 0
+    else:
+        return timer
+
+def minus_life(pacman, Ghosts):
+    for i in range(len(Ghosts)):
+        if Ghosts[i].distance(pacman) == 0:
+            for j in range(len(Ghosts)):
+                Ghosts[j].activate()
+            return True
+
+# def main():
+#     pygame.init()
+#     pygame.font.init()
+#     screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
+#
+#     # НАЧАЛЬНЫЕ КООРДИНАТЫ ИЗМЕНИЛИСЬ
+#     ghost_1 = Ghost([480, 390], "ghost_2.png") #создание призраков
+#     ghost_1.activate()
+#     ghost_2 = Ghost([480, 510], "ghost_2.png")
+#     ghost_2.activate()
+#     ghost_3 = Ghost([660, 510], "ghost_2.png")
+#     ghost_3.activate()
+#     ghost_4 = Ghost([660, 390], "ghost_2.png")
+#     ghost_4.activate()
+#     Ghosts = []
+#     Ghosts.append(ghost_1)
+#     Ghosts.append(ghost_2)
+#     Ghosts.append(ghost_3)
+#     Ghosts.append(ghost_4)
+#     out = False #показывает вышли призраки или нет
+#     # Основной цикл программы
+#     #КАРТА ДЛЯ ПРИЗРАКОВ
+#     timer = 0
+#     map = Map()
+#
+#     game_over = False
+#     while not game_over:
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 game_over = True
+#         screen.fill(Settings.BACKGROUND_COLOR)
+#         #map.visualizeGrid()
+#         timer = end_chasing(timer, Ghosts)
+#         if minus_life(fake_pacman, Ghosts):
+#             out = False
+#         #ПАРАМЕТРЫ ФУНКЦИИ move_random() ИЗМЕНИЛИСЬ
+#         if out:#если все призраки вышли
+#             timer = check(Ghosts, fake_pacman, map, timer)
+#             ghost_1.move_random(screen, map)
+#             ghost_2.move_random(screen, map)
+#             ghost_3.move_random(screen, map)
+#             ghost_4.move_random(screen, map)
+#
+#             out = True
+#         else:
+#             ghost_1.move_1(screen)
+#             ghost_2.move_2(screen)
+#             ghost_3.move_3(screen)
+#             ghost_4.move_4(screen)
+#         if ghost_1.out_1() and ghost_2.out_2() and ghost_3.out_3() and ghost_4.out_4(): #проверка что вышли все призраки
+#             out = True
+#
+#         pygame.display.flip()
+#         pygame.time.wait(6)
+#     exit(0)
+#
+#  if __name__ == '__main__':
+#      main()
