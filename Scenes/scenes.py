@@ -92,7 +92,7 @@ class Game_scene(Base_scene):
 
     def logic(self):
         for sd in my_map.seeds:  # проверка того, что пакман съедает семку
-            if packman.get_position()[0] + 15 == sd.pos[0] and packman.get_position()[1] + 15 == sd.pos[1]:
+            if int((packman.get_position()[0] + 15) / 30) == int(sd.pos[0]/30) and int((packman.get_position()[1] + 15) / 30) == int(sd.pos[1]/30):
                 if sd.is_super == True:
                     my_map.seeds.remove(sd)
                     Settings.SCORE += 5  # начисление очков за большую семку
