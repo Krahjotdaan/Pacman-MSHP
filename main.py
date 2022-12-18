@@ -5,7 +5,7 @@ my_map = Map()
 
 gridDisplay = pygame.display.set_mode((1200, 900))
 pygame.display.get_surface().fill((200, 200, 200))  # background
-packman = Packman([30, 120], [0, 0], "Packman/pacmanOpen.png")
+packman = Packman([30, 120], [0, 0], "Packman/pacmanOpen.png", 3)
 playMusic('Music/pacman_music.mp3')
 
 
@@ -18,6 +18,7 @@ def main():
     game_over = False
 
     while not game_over:
+        packman.damag()
         screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
         for event in pygame.event.get():
             if Settings.scene_changed:

@@ -9,7 +9,7 @@ my_map = Map()
 
 list_ghosts = creating_ghosts()
 gosts_activate(list_ghosts)
-packman = Packman([30, 120], [0, 0], "Packman/pacmanOpen.png")
+packman = Packman([30, 120], [0, 0], "Packman/pacmanOpen.png", 3)
 
 def set_scene(index):
     Settings.scene_changed = True
@@ -148,6 +148,9 @@ class Game_scene(Base_scene):
         my_map.visualizeGrid()
         my_map.draw_seeds()
         packman.draw(screen)
+        #packman.damag()
+        if packman.hps():
+            set_scene(0)
 
         self.timer = end_chasing(self.timer, list_ghosts)
         if minus_life(packman, list_ghosts):
