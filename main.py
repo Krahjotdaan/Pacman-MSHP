@@ -19,7 +19,7 @@ Ghost.gosts_activate(list_ghosts)
 def main():
     global event
     pygame.font.init()
-    scenes = [Menu_scene(), Game_scene(), Game_Over_scene()]
+    scenes = [Menu_scene(), Game_scene(), Game_Over_scene(), Records_scene()]
 
     game_over = False
 
