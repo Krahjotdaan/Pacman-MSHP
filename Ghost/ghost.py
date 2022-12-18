@@ -305,7 +305,7 @@ def end_chasing(timer, Ghosts):
 
 def minus_life(pacman, Ghosts):
     for i in range(len(Ghosts)):
-        if Ghosts[i].distance(pacman) == 0:
+        if Ghosts[i].distance(pacman) >= 0 and Ghosts[i].distance(pacman) <= 5:
             for j in range(len(Ghosts)):
                 Ghosts[j].activate()
             return True
