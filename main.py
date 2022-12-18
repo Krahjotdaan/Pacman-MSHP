@@ -9,6 +9,7 @@ packman = Packman([30, 120], [0, 0], "Packman/pacmanOpen.png")
 playMusic('Music/pacman_music.mp3')
 
 
+
 def main():
     global event
     pygame.font.init()
