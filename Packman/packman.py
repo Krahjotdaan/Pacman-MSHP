@@ -4,6 +4,7 @@ class Packman:
     def __init__(self, pos, shift, filename):
         self.pos = pos
         self.shift = shift # то, куда пакман будет постоянно идти
+        self.cash_shift = shift
         self.direction = '' # то же самое, что и сверху, но понятнее
         self.image = pygame.image.load(filename).convert()
         self.rect = pygame.Rect(pos[0], pos[1], 25, 25)
@@ -33,10 +34,14 @@ class Packman:
             self.set_shift_and_angle(pygame.K_LEFT, [-1, 0], 180, event)
             self.set_shift_and_angle(pygame.K_RIGHT, [1, 0], 0, event)
 
-    def logic(self, matrix):
+    def logic(self, matrix): # проверка коллизии
         if matrix[self.pos[1] // 30][self.pos[0] // 30] == 1 or matrix[(self.pos[1] + 25) // 30][(self.pos[0] + 25) // 30] == 1 or matrix[(self.pos[1] + 25) // 30][(self.pos[0]) // 30] == 1 or matrix[(self.pos[1]) // 30][(self.pos[0] + 25) // 30] == 1:
             self.pos = [self.pos[0] - self.shift[0], self.pos[1] - self.shift[1]] # отодвинуть пакмана назад при коллизии с клеткой
             self.shift = [0, 0]
+        # if(matrix[self.pos[1] // 30 + self.shift[0]][self.pos[0] // 30 + self.shift[1]] == 1):
+        #     self.
+        print((self.pos[1] + 5) // 30 + self.shift[0], (self.pos[0] + 5) // 30 + self.shift[1])
+        # pygame.draw.rect(screen, (255, 255, 255), ((self.pos[1] + 5) // 30 + self.shift[0], (self.pos[0] + 5) // 30 + self.shift[1]), 30, 30)
         self.move()
 
     def move(self):
