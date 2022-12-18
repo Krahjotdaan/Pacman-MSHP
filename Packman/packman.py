@@ -1,13 +1,14 @@
 import pygame
 from Map.map import Map
 class Packman:
-    def __init__(self, pos, shift, filename):
+    def __init__(self, pos, shift, filename, hp):
+        self.hp = hp #кол-во жизней
         self.pos = pos
         self.shift = shift # то, куда пакман будет постоянно идти
         self.cash_shift = shift
         self.direction = '' # то же самое, что и сверху, но понятнее
         self.image = pygame.image.load(filename).convert()
-        self.rect = pygame.Rect(pos[0], pos[1], 30, 30)
+        self.rect = self.image.get_rect()
         self.angle = 0
 
     def get_position(self):
@@ -59,4 +60,17 @@ class Packman:
         self.pos[1] += self.shift[1]
         self.rect = pygame.Rect(self.pos[0], self.pos[1], 30, 30)
 
+    def get_hp(self):
+        return self.hp
+
+    def damag(self):  # вызываете когда пакмен должен получить урон
+        self.hp -= 1
+
+    def hps(self):  # проверка на то умер ли пакмен
+        if self.get_hp() <= 0:  # смерть пакмена
+            #self.pos = [0, 0]
+            self.hp = 3
+            #self.image = pygame.image.load("Packman/pacmanDead.png").convert()
+            return True
+        return False
 
