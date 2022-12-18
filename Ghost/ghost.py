@@ -289,13 +289,16 @@ def check(Ghosts, pacman, map, timer):
         if Ghosts[i].distance(pacman) < min_dist:
             min_dist = Ghosts[i].distance(pacman)
             min_index = i
-    if min_dist <= 5000000000 or Ghosts[min_index].chasing:
-        Ghosts[min_index].dir = Ghosts[min_index].chase(pacman, map)
+    if min_dist <= 500 or Ghosts[min_index].chasing:
+        Ghosts[0].dir = Ghosts[0].chase(pacman, map)
+        Ghosts[1].dir = Ghosts[1].chase(pacman, map)
+        Ghosts[2].dir = Ghosts[2].chase(pacman, map)
+        Ghosts[3].dir = Ghosts[3].chase(pacman, map)
         timer += 1
     return timer
 
 def end_chasing(timer, Ghosts):
-    if timer >= 5000000000:
+    if timer >= 7000:
         for i in range(len(Ghosts)):
             if Ghosts[i].chasing == True:
                 Ghosts[i].chasing = False
