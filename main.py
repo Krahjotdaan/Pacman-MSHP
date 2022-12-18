@@ -1,9 +1,4 @@
-import pygame
-from settings import Settings
-from Map.map import Map
-from Packman.packman import Packman
 from Music.music import playMusic
-from Ghost.ghost import Ghost
 from Scenes.scenes import *
 
 my_map = Map()
@@ -12,8 +7,6 @@ gridDisplay = pygame.display.set_mode((1200, 900))
 pygame.display.get_surface().fill((200, 200, 200))  # background
 packman = Packman([30, 120], [0, 0], "Packman/pacmanOpen.png")
 playMusic('Music/pacman_music.mp3')
-list_ghosts = Ghost.creating_ghosts()
-Ghost.gosts_activate(list_ghosts)
 
 
 def main():
@@ -25,7 +18,6 @@ def main():
 
     while not game_over:
         screen = pygame.display.set_mode([Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT])
-
         for event in pygame.event.get():
             if Settings.scene_changed:
                 Settings.scene_changed = False
