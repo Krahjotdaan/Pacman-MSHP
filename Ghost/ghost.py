@@ -197,15 +197,15 @@ class Ghost:
             return False
 
     def distance(self, pacman):
-        delta_x = self.rect.top - pacman.rect.top
-        delta_y = self.rect.left - pacman.rect.left
+        delta_x = self.rect.top - pacman.pos[0]
+        delta_y = self.rect.left - pacman.pos[1]
         return int(((abs(delta_x))**2+(abs(delta_y))**2)**0.5)
 
     def distance_x(self, pacman):
-        return abs(self.rect.top - pacman.rect.top)
+        return abs(self.rect.top - pacman.pos[0])
 
     def distance_y(self, pacman):
-        return abs(self.rect.left - pacman.rect.left)
+        return abs(self.rect.left - pacman.pos[1])
 
     def chase(self, pacman, map):
         self.chasing = True
@@ -219,26 +219,26 @@ class Ghost:
                 dirs.append(3)
             if not map.is_wall(self.pos_matrix[1], self.pos_matrix[0] + 1):
                 dirs.append(4)
-            if self.rect.top > pacman.rect.top:
+            if self.rect.top > pacman.pos[0]:
 
                 for i in range(len(dirs)):
                     if dirs[i] == 3:
 
                         return 3
-            elif self.rect.top < pacman.rect.top:
+            elif self.rect.top < pacman.pos[0]:
 
                 for i in range(len(dirs)):
                     if dirs[i] == 4:
 
                         return 4
 
-            elif self.rect.left > pacman.rect.left:
+            elif self.rect.left > pacman.pos[1]:
 
                 for i in range(len(dirs)):
                     if dirs[i] == 1:
 
                         return 1
-            elif self.rect.left < pacman.rect.left:
+            elif self.rect.left < pacman.pos[1]:
 
                 for i in range(len(dirs)):
                     if dirs[i] == 2:
@@ -283,19 +283,19 @@ def creating_ghosts():
 
 def check(Ghosts, pacman, map, timer):
 
-    min_dist = 10000
+    min_dist = 100000
     min_index = 0
     for i in range(len(Ghosts)):
         if Ghosts[i].distance(pacman) < min_dist:
             min_dist = Ghosts[i].distance(pacman)
             min_index = i
-    if min_dist <= 5 or Ghosts[min_index].chasing:
+    if min_dist <= 5000000000 or Ghosts[min_index].chasing:
         Ghosts[min_index].dir = Ghosts[min_index].chase(pacman, map)
         timer += 1
     return timer
 
 def end_chasing(timer, Ghosts):
-    if timer >= 1000:
+    if timer >= 5000000000:
         for i in range(len(Ghosts)):
             if Ghosts[i].chasing == True:
                 Ghosts[i].chasing = False
@@ -305,7 +305,7 @@ def end_chasing(timer, Ghosts):
 
 def minus_life(pacman, Ghosts):
     for i in range(len(Ghosts)):
-        if Ghosts[i].distance(pacman) >= 0 and Ghosts[i].distance(pacman) <= 5:
+        if Ghosts[i].distance(pacman) >= 0 and Ghosts[i].distance(pacman) <= 1:
             for j in range(len(Ghosts)):
                 Ghosts[j].activate()
             return True

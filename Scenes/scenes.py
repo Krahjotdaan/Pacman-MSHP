@@ -20,8 +20,7 @@ def set_menu_scene():
 def set_game_scene():
     set_scene(1)
 def set_records_scene():
-    set_scene(2)
-
+    set_scene(3)
 class Base_scene:
     def __init__(self):
         self.react_to_escape = True
@@ -44,6 +43,48 @@ class Base_scene:
         self.event(event)
         self.draw(screen)
 
+class Records_scene(Base_scene): # сцена рекордов
+    BUTTON_STYLE = {
+        "hover_color": pygame.Color('blue'),
+        "clicked_color": pygame.Color('green'),
+        "clicked_font_color": pygame.Color('black'),
+        "hover_font_color": pygame.Color('orange'),
+    }
+    def __init__(self, dct={"pythonist":1000000, "player":0}): # получает словарь
+        super().__init__()
+        self.arr = list(dct)
+        self.dict = dct
+        scene_2_button_back_geometry = pygame.Rect(Settings.WINDOW_WIDTH / 2 - 100 / 2,
+                                                   Settings.WINDOW_HEIGHT / 2 + 300 - 50,
+                                                   100, 50)
+        BUTTON_STYLE = {
+            "hover_color": pygame.Color('blue'),
+            "clicked_color": pygame.Color('green'),
+            "clicked_font_color": pygame.Color('black'),
+            "hover_font_color": pygame.Color('orange'),
+        }
+
+        back_button = Button(scene_2_button_back_geometry, pygame.Color('gray'), set_menu_scene,
+                             text='Back', **BUTTON_STYLE)
+        self.buttons = [back_button]
+    def draw(self, screen): # рисуем таблицу
+        pygame.draw.rect(screen, ("black"), [Settings.WINDOW_WIDTH // 2 - 350, Settings.WINDOW_HEIGHT // 6, 700, 500])
+        for i in range(len(self.buttons)):
+            self.buttons[i].update(screen)
+        f1 = pygame.font.SysFont('ubuntu', 24) # шрифт
+        text = f1.render("Leaderboard", False,
+                          (255, 255, 255)) # заголовок
+        screen.blit(text, (Settings.WINDOW_WIDTH // 2 - 75, Settings.WINDOW_HEIGHT - 800))
+        for i in range(len(self.arr)):
+            s = f1.render("{}:{} {}".format(self.arr[i],(40-len(self.arr[i])) * ' .', self.dict[self.arr[i]]), False,
+                          (255, 255, 255))
+            screen.blit(s,(Settings.WINDOW_WIDTH // 2 - 300, Settings.WINDOW_HEIGHT - 750 + (i+1) * 40))
+    def event(self, event):
+        for button in self.buttons:
+            button.check_event(event)
+
+
+
 class Menu_scene(Base_scene):
     BUTTON_STYLE = {
         "hover_color": pygame.Color('blue'),
@@ -56,9 +97,6 @@ class Menu_scene(Base_scene):
         scene_0_button_records_geometry = pygame.Rect(Settings.WINDOW_WIDTH / 2 - 100 / 2,
                                                       Settings.WINDOW_HEIGHT / 2 - 10 - 50,
                                                       100, 50)
-        scene_0_button_back_geometry = pygame.Rect(Settings.WINDOW_WIDTH / 2 - 100 / 2,
-                                                   Settings.WINDOW_HEIGHT / 2 + 300 - 50,
-                                                   100, 50)
         scene_0_button_new_geometry = pygame.Rect(Settings.WINDOW_WIDTH / 2 - 100 / 2,
                                                   Settings.WINDOW_HEIGHT / 2 - 80 - 50, 100, 50)
         scene_0_button_exit_geometry = pygame.Rect(Settings.WINDOW_WIDTH / 2 - 100 / 2, Settings.WINDOW_HEIGHT / 2 + 10,
@@ -73,17 +111,16 @@ class Menu_scene(Base_scene):
 
         records_button = Button(scene_0_button_records_geometry, pygame.Color('gray'), set_records_scene,
                                 text='Records', **BUTTON_STYLE)
-        back_button = Button(scene_0_button_back_geometry, pygame.Color('gray'), set_menu_scene,
-                             text='Back', **BUTTON_STYLE)
         new_game_button = Button(scene_0_button_new_geometry, pygame.Color('gray'), set_game_scene,
                                  text='New game', **BUTTON_STYLE)
         exit_button = Button(scene_0_button_exit_geometry, pygame.Color('gray'), exit,
                              text='Exit', **BUTTON_STYLE)
 
-        self.buttons = [records_button, new_game_button, exit_button, back_button]
+        self.buttons = [records_button, new_game_button, exit_button]
     def draw(self, screen):
-        for i in range(len(self.buttons) - 1):  # чтобы делать для всех, кроме кнопки back
+        for i in range(len(self.buttons)):
             self.buttons[i].update(screen)
+
     def event(self, event):
         for button in self.buttons:
             button.check_event(event)
@@ -96,7 +133,7 @@ class Game_scene(Base_scene):
 
     def logic(self):
         for sd in my_map.seeds:  # проверка того, что пакман съедает семку
-            if packman.get_position()[0] + 15 == sd.pos[0] and packman.get_position()[1] + 15 == sd.pos[1]:
+            if int((packman.get_position()[0] + 15) / 30) == int(sd.pos[0]/30) and int((packman.get_position()[1] + 15) / 30) == int(sd.pos[1]/30):
                 if sd.is_super == True:
                     my_map.seeds.remove(sd)
                     Settings.SCORE += 5  # начисление очков за большую семку

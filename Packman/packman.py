@@ -4,9 +4,10 @@ class Packman:
     def __init__(self, pos, shift, filename):
         self.pos = pos
         self.shift = shift # то, куда пакман будет постоянно идти
+        self.cash_shift = shift
         self.direction = '' # то же самое, что и сверху, но понятнее
         self.image = pygame.image.load(filename).convert()
-        self.rect = pygame.Rect(pos[0], pos[1], 25, 25)
+        self.rect = pygame.Rect(pos[0], pos[1], 30, 30)
         self.angle = 0
 
     def get_position(self):
@@ -14,6 +15,7 @@ class Packman:
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+        # pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(self.pos[0] + self.cash_shift[0] * 30, self.pos[1] + self.cash_shift[1] * 30, 25, 25))
 
     def set_angle(self, angle):
         self.angle = 360 - self.angle
@@ -21,26 +23,40 @@ class Packman:
         self.angle = angle
         self.image = pygame.transform.rotate(self.image, self.angle)
 
-    def set_shift_and_angle(self, key, shift, angle, event):
+    def set_shift_and_angle(self, key, shift, angle, event, matrix):
         if (event.key == key):
-            self.shift = shift
-            self.set_angle(angle)
+            if matrix[self.pos[1] // 30 + shift[1]][self.pos[0] // 30 + shift[0]] == 0 and matrix[(self.pos[1] + 29) // 30 + shift[1]][(self.pos[0] + 29) // 30 + shift[0]] == 0:
+                self.shift = shift
+                self.set_angle(angle)
+            self.cash_shift = shift
 
     def event(self, event): # надо убрать дублирование кода если это возможно
         if(event.type == pygame.KEYDOWN):
-            self.set_shift_and_angle(pygame.K_DOWN, [0, 1], 270, event)
-            self.set_shift_and_angle(pygame.K_UP, [0, -1], 90, event)
-            self.set_shift_and_angle(pygame.K_LEFT, [-1, 0], 180, event)
-            self.set_shift_and_angle(pygame.K_RIGHT, [1, 0], 0, event)
+            self.set_shift_and_angle(pygame.K_DOWN, [0, 1], 270, event, Map().matrix)
+            self.set_shift_and_angle(pygame.K_UP, [0, -1], 90, event, Map().matrix)
+            self.set_shift_and_angle(pygame.K_LEFT, [-1, 0], 180, event, Map().matrix)
+            self.set_shift_and_angle(pygame.K_RIGHT, [1, 0], 0, event, Map().matrix)
 
-    def logic(self, matrix):
-        if matrix[self.pos[1] // 30][self.pos[0] // 30] == 1 or matrix[(self.pos[1] + 25) // 30][(self.pos[0] + 25) // 30] == 1 or matrix[(self.pos[1] + 25) // 30][(self.pos[0]) // 30] == 1 or matrix[(self.pos[1]) // 30][(self.pos[0] + 25) // 30] == 1:
+    def logic(self, matrix): # проверка коллизии
+        if(matrix[self.pos[1] // 30 + self.cash_shift[1]][self.pos[0] // 30 + self.cash_shift[0]] == 0 and matrix[(self.pos[1] + 29) // 30 + self.cash_shift[1]][(self.pos[0] + 29) // 30 + self.cash_shift[0]]) == 0 and matrix[(self.pos[1]) // 30 + self.cash_shift[1]][(self.pos[0] + 29) // 30 + self.cash_shift[0]] == 0 and matrix[(self.pos[1] + 29) // 30 + self.cash_shift[1]][(self.pos[0]) // 30 + self.cash_shift[0]] == 0:
+            self.shift = self.cash_shift
+            if(self.shift == [0, 1]):
+                self.set_angle(270)
+            if(self.shift == [0, -1]):
+                self.set_angle(90)
+            if(self.shift == [1, 0]):
+                self.set_angle(0)
+            if(self.shift == [-1, 0]):
+                self.set_angle(180)
+        if matrix[self.pos[1] // 30][self.pos[0] // 30] == 1 or matrix[(self.pos[1] + 29) // 30][(self.pos[0] + 29) // 30] == 1 or matrix[(self.pos[1] + 29) // 30][(self.pos[0]) // 30] == 1 or matrix[(self.pos[1]) // 30][(self.pos[0] + 29) // 30] == 1:
             self.pos = [self.pos[0] - self.shift[0], self.pos[1] - self.shift[1]] # отодвинуть пакмана назад при коллизии с клеткой
             self.shift = [0, 0]
+
         self.move()
 
     def move(self):
         self.pos[0] += self.shift[0]
         self.pos[1] += self.shift[1]
-        self.rect = pygame.Rect(self.pos[0], self.pos[1], 25, 25)
+        self.rect = pygame.Rect(self.pos[0], self.pos[1], 30, 30)
+
 
