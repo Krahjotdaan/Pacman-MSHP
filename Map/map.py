@@ -101,7 +101,8 @@ class Map():
                 x += grid_node_width  # для каждого элемента в этой строке мы перемещаемся на один шаг вправо
             y += grid_node_height  # для каждой новой строки мы перемещаемся на один шаг вниз
         # отображение счета на экран
-        f1 = pygame.font.Font(None, 36)
-        text1 = f1.render('Your count is: ' + str(settings.Score()), True, (200, 0, 0))
-        gridDisplay.blit(text1, (10, 5))
+        f1 = pygame.font.SysFont('ubuntu', 30)
+
+        text1 = f1.render('Your score: ' + str(settings.Score()), True, (255, 255, 255))
+        gridDisplay.blit(text1, (450, 60))
         # отображение счета на экран
