@@ -6,6 +6,9 @@ import pygame
 # 2 - территория на которой не спавнятся семечки (там будет находиться счет)
 # 3 - стена, через которую выходят призраки, но не может пройти пакмэн
 # 5 - супер семечко
+import settings
+from settings import Settings
+import pygame.font
 
 class Map():
     matrix = [[]]
@@ -67,6 +70,11 @@ def visualizeGrid():
 
             x += grid_node_width  # для каждого элемента в этой строке мы перемещаемся на один шаг вправо
         y += grid_node_height  # для каждой новой строки мы перемещаемся на один шаг вниз
+
+    f1 = pygame.font.Font(None, 36)
+    text1 = f1.render('Your count is: ' + str(settings.Score()), True, (200, 0, 0))
+    gridDisplay.blit(text1, (10, 5))
+
     pygame.display.update()
 
 

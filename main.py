@@ -1,6 +1,6 @@
 import pygame
 
-#shfsjkh
+# shfsjkh
 from settings import Settings
 from Map.map import Map
 from Map.map import visualizeGrid
@@ -11,11 +11,12 @@ my_map = Map()
 
 gridDisplay = pygame.display.set_mode((1200, 900))
 pygame.display.get_surface().fill((200, 200, 200))  # background
-packman = Packman([30,120], [0,0], "Packman/pacmanOpen.png")
+packman = Packman([30, 120], [0, 0], "Packman/pacmanOpen.png")
 playMusic('Music/pacman_music.mp3')
 
 
 def main():
+    pygame.font.init()
     # Основной цикл программы
     game_over = False
     while not game_over:
@@ -36,8 +37,10 @@ def main():
 
     exit(0)
 
+
 def check_for_exit(event):
     return event.type == pygame.QUIT
+
 
 if __name__ == '__main__':
     main()
