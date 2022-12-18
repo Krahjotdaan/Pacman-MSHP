@@ -102,7 +102,6 @@ class Map():
             y += grid_node_height  # для каждой новой строки мы перемещаемся на один шаг вниз
         # отображение счета на экран
         f1 = pygame.font.SysFont('ubuntu', 30)
-
         text1 = f1.render('Your score: ' + str(settings.Score()), True, (255, 255, 255))
         gridDisplay.blit(text1, (450, 60))
         # отображение счета на экран
