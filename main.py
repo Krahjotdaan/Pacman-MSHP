@@ -1,5 +1,10 @@
+import pygame
+
+from Scenes.game_over_scene import Game_Over_scene
 from Music.music import playMusic
-from Scenes.scenes import *
+from Scenes.game_scene import *
+from Scenes.menu_scene import Menu_scene
+from Scenes.records_scene import Records_scene
 
 my_map = Map()
 
