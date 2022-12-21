@@ -1,12 +1,11 @@
 import pygame
 
 from Scenes.game_over_scene import Game_Over_scene
+from settings import Settings
 from Music.music import playMusic
 from Scenes.game_scene import *
 from Scenes.menu_scene import Menu_scene
 from Scenes.records_scene import Records_scene
-
-my_map = Map()
 
 gridDisplay = pygame.display.set_mode((1200, 900))
 pygame.display.get_surface().fill((200, 200, 200))  # background
@@ -16,7 +15,6 @@ playMusic('Music/pacman_music.mp3')
 
 
 def main():
-    global event
     pygame.font.init()
     scenes = [Menu_scene(), Game_scene(), Game_Over_scene(), Records_scene()]
 

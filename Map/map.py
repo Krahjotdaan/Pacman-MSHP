@@ -1,10 +1,15 @@
 import pygame
-from Seeds.seed import Seed, Super_seed
-grid_node_width = 30
-grid_node_height = 30
-gridDisplay = pygame.display.set_mode((1200, 900))
-pygame.display.get_surface().fill((200, 200, 200))  # background
 import settings
+
+from Seeds.seed import Seed
+from Seeds.super_seed import Super_seed
+
+from score import Score
+from Seeds.timer_super_seed import Timer
+
+GRID_NODE_WIDTH = settings.GRID_NODE_WIDTH
+GRID_NODE_HEIGHT = settings.GRID_NODE_HEIGHT
+gridDisplay = settings.gridDisplay
 # 0 - пустой черный фон по которому ходит пакмэн
 # 0 - обычное семечко
 # 1 - синия стена
@@ -62,8 +67,8 @@ class Map():
                 elif item == 0:
                     seed = Seed((245, 245, 220), (x + 15, y + 15)) # семечки
                     self.seeds.append(seed)
-                x += grid_node_width
-            y += grid_node_height
+                x += GRID_NODE_WIDTH
+            y += GRID_NODE_HEIGHT
 
     def draw_seeds(self):
         for seed in self.seeds:
@@ -77,7 +82,8 @@ class Map():
         return self.seeds
 
     def createSquare(self, x, y, color):
-        pygame.draw.rect(gridDisplay, color, [x, y, grid_node_width, grid_node_height])
+        pygame.draw.rect(gridDisplay, color, [x, y, GRID_NODE_WIDTH, GRID_NODE_HEIGHT])
+
 
     def is_wall(self, x, y):
         if self.matrix[x-1][y-1] == 1 or self.matrix[x-1][y-1] == 3:
@@ -98,10 +104,9 @@ class Map():
                     self.createSquare(x, y, (255, 165, 0)) # блок, через который не может пройти пакмэн, но могут пройти призраки
                 # else:
                 #     self.createSquare(x, y, (0, 0, 0))
-                x += grid_node_width  # для каждого элемента в этой строке мы перемещаемся на один шаг вправо
-            y += grid_node_height  # для каждой новой строки мы перемещаемся на один шаг вниз
+                x += GRID_NODE_WIDTH  # для каждого элемента в этой строке мы перемещаемся на один шаг вправо
+            y += GRID_NODE_HEIGHT  # для каждой новой строки мы перемещаемся на один шаг вниз
         # отображение счета на экран
-        f1 = pygame.font.SysFont('ubuntu', 30)
-        text1 = f1.render('Your score: ' + str(settings.Score()), True, (255, 255, 255))
-        gridDisplay.blit(text1, (450, 60))
+        Score().draw(gridDisplay)
+        Timer().draw(gridDisplay)
         # отображение счета на экран
