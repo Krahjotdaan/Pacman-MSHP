@@ -10,6 +10,8 @@ from Ghost.ghost import end_chasing, minus_life, check, creating_ghosts, ghosts_
 # map = Map() - это один определённый объект
 # Map() - при каждом использовонии новый объект
 
+
+
 list_ghosts = creating_ghosts()
 gosts_activate(list_ghosts)
 
