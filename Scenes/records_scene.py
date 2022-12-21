@@ -2,7 +2,7 @@ import pygame
 
 
 from Scenes.base_scene import Base_scene
-from settings import Settings
+from all_vatiable import settings
 from Button.button import Button
 from Scenes.menu_scene import set_menu_scene
 
@@ -18,8 +18,8 @@ class Records_scene(Base_scene): # сцена рекордов
         super().__init__()
         self.arr = list(dct)
         self.dict = dct
-        scene_2_button_back_geometry = pygame.Rect(Settings.WINDOW_WIDTH / 2 - 100 / 2,
-                                                   Settings.WINDOW_HEIGHT / 2 + 300 - 50,
+        scene_2_button_back_geometry = pygame.Rect(settings.WINDOW_WIDTH / 2 - 100 / 2,
+                                                   settings.WINDOW_HEIGHT / 2 + 300 - 50,
                                                    100, 50)
         BUTTON_STYLE = {
             "hover_color": pygame.Color('blue'),
@@ -32,17 +32,17 @@ class Records_scene(Base_scene): # сцена рекордов
                              text='Back', **BUTTON_STYLE)
         self.buttons = [back_button]
     def draw(self, screen): # рисуем таблицу
-        pygame.draw.rect(screen, ("black"), [Settings.WINDOW_WIDTH // 2 - 350, Settings.WINDOW_HEIGHT // 6, 700, 500])
+        pygame.draw.rect(screen, ("black"), [settings.WINDOW_WIDTH // 2 - 350, settings.WINDOW_HEIGHT // 6, 700, 500])
         for i in range(len(self.buttons)):
             self.buttons[i].update(screen)
         f1 = pygame.font.SysFont('ubuntu', 24) # шрифт
         text = f1.render("Leaderboard", False,
                           (255, 255, 255)) # заголовок
-        screen.blit(text, (Settings.WINDOW_WIDTH // 2 - 75, Settings.WINDOW_HEIGHT - 800))
+        screen.blit(text, (settings.WINDOW_WIDTH // 2 - 75, settings.WINDOW_HEIGHT - 800))
         for i in range(len(self.arr)):
             s = f1.render("{}:{} {}".format(self.arr[i],(40-len(self.arr[i])) * ' .', self.dict[self.arr[i]]), False,
                           (255, 255, 255))
-            screen.blit(s,(Settings.WINDOW_WIDTH // 2 - 300, Settings.WINDOW_HEIGHT - 750 + (i+1) * 40))
+            screen.blit(s,(settings.WINDOW_WIDTH // 2 - 300, settings.WINDOW_HEIGHT - 750 + (i+1) * 40))
     def event(self, event):
         for button in self.buttons:
             button.check_event(event)

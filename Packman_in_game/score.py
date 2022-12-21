@@ -12,5 +12,6 @@ class Score():
 
     def draw(self, gridDisplay):
         sys = pygame.font.SysFont('ubuntu', 30)
-        text = sys.render('Your score: ' + str(Score().get_score()), True, (255, 255, 255))
+        text = sys.render('Your score: ' + str(self.get_score()), True, (255, 255, 255))
         gridDisplay.blit(text, (450, 60))
+

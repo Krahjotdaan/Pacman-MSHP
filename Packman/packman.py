@@ -1,5 +1,6 @@
 import pygame
 from Map.map import Map
+
 class Packman:
     def __init__(self, pos, shift, filename, hp):
         self.hp = hp #кол-во жизней

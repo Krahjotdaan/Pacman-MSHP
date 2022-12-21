@@ -313,3 +313,5 @@ def minus_life(pacman, Ghosts):
             for j in range(len(Ghosts)):
                 Ghosts[j].activate()
             return True
+
+

@@ -2,7 +2,7 @@ import pygame
 
 
 from Scenes.base_scene import Base_scene
-from settings import Settings
+from all_vatiable import settings
 from Button.button import Button
 
 
@@ -15,12 +15,12 @@ class Menu_scene(Base_scene):
     }
     def __init__(self):
         super().__init__()
-        scene_0_button_records_geometry = pygame.Rect(Settings.WINDOW_WIDTH / 2 - 100 / 2,
-                                                      Settings.WINDOW_HEIGHT / 2 - 10 - 50,
+        scene_0_button_records_geometry = pygame.Rect(settings.WINDOW_WIDTH / 2 - 100 / 2,
+                                                      settings.WINDOW_HEIGHT / 2 - 10 - 50,
                                                       100, 50)
-        scene_0_button_new_geometry = pygame.Rect(Settings.WINDOW_WIDTH / 2 - 100 / 2,
-                                                  Settings.WINDOW_HEIGHT / 2 - 80 - 50, 100, 50)
-        scene_0_button_exit_geometry = pygame.Rect(Settings.WINDOW_WIDTH / 2 - 100 / 2, Settings.WINDOW_HEIGHT / 2 + 10,
+        scene_0_button_new_geometry = pygame.Rect(settings.WINDOW_WIDTH / 2 - 100 / 2,
+                                                  settings.WINDOW_HEIGHT / 2 - 80 - 50, 100, 50)
+        scene_0_button_exit_geometry = pygame.Rect(settings.WINDOW_WIDTH / 2 - 100 / 2, settings.WINDOW_HEIGHT / 2 + 10,
                                                    100, 50)
 
         BUTTON_STYLE = {
@@ -47,8 +47,8 @@ class Menu_scene(Base_scene):
             button.check_event(event)
 
 def set_scene(index):
-    Settings.scene_changed = True
-    Settings.scene_index = index
+    settings.scene_changed = True
+    settings.scene_index = index
 
 def set_menu_scene():
     set_scene(0)

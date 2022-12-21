@@ -1,15 +1,11 @@
 import pygame
-import settings
 
 from Seeds.seed import Seed
 from Seeds.super_seed import Super_seed
 
-from score import Score
-from Seeds.timer_super_seed import Timer
-
-GRID_NODE_WIDTH = settings.GRID_NODE_WIDTH
-GRID_NODE_HEIGHT = settings.GRID_NODE_HEIGHT
-gridDisplay = settings.gridDisplay
+GRID_NODE_WIDTH = 30
+GRID_NODE_HEIGHT = 30
+gridDisplay = pygame.display.set_mode((1200, 900))
 # 0 - пустой черный фон по которому ходит пакмэн
 # 0 - обычное семечко
 # 1 - синия стена
@@ -102,11 +98,13 @@ class Map():
                     self.createSquare(x, y, (0, 0, 0))  # блок, через который не может пройти пакмэн, но могут пройти призраки
                 elif item == 3:
                     self.createSquare(x, y, (255, 165, 0)) # блок, через который не может пройти пакмэн, но могут пройти призраки
-                # else:
-                #     self.createSquare(x, y, (0, 0, 0))
                 x += GRID_NODE_WIDTH  # для каждого элемента в этой строке мы перемещаемся на один шаг вправо
             y += GRID_NODE_HEIGHT  # для каждой новой строки мы перемещаемся на один шаг вниз
         # отображение счета на экран
-        Score().draw(gridDisplay)
-        Timer().draw(gridDisplay)
+        from all_vatiable import score
+        from all_vatiable import timer
+        from all_vatiable import health
+        score.draw(gridDisplay)
+        timer.draw(gridDisplay)
+        health.draw(gridDisplay)
         # отображение счета на экран
