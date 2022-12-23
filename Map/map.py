@@ -15,7 +15,7 @@ gridDisplay = pygame.display.set_mode((1200, 900))
 
 class Map():
     matrix = [[]] # карта
-    seeds = []  # все зёрна на карте
+    seeds = [0]  # все зёрна на карте
 
     def __init__(self):
         self.matrix = [

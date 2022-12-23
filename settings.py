@@ -7,3 +7,4 @@ class Settings:
         self.WINDOW_HEIGHT = 900
         self.scene_changed = True
         self.scene_index = 0
+        self.number_of_seeds = 517
