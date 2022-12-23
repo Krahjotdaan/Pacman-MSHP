@@ -37,10 +37,10 @@ class Game_scene(Base_scene):
                     (packman.get_position()[1] + 15) / 30) == int(sd.pos[1] / 30):
                 if sd.is_super == True:
                     map.seeds.remove(sd)
-                    score.add_score(5)  # начисление очков за большую семку
+                    score.add_score(10)  # начисление очков за большую семку
                 else:
                     map.seeds.remove(sd)
-                    score.add_score(1)  # начисление очков за обычную семку
+                    score.add_score(10)  # начисление очков за обычную семку
 
         packman.logic(map.matrix)
 
