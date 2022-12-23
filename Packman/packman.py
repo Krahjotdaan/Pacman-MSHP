@@ -17,6 +17,8 @@ class Packman:
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+        text = pygame.font.SysFont('ubuntu', 30).render('Heatr: ' + str(self.get_hp()), True, (255, 255, 255))
+        screen.blit(text, (450, 140))
         # pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(self.pos[0] + self.cash_shift[0] * 30, self.pos[1] + self.cash_shift[1] * 30, 25, 25))
 
     def set_angle(self, angle):
