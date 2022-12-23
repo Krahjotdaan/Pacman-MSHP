@@ -103,8 +103,6 @@ class Map():
         # отображение счета на экран
         from all_vatiable import score
         from all_vatiable import timer
-        from all_vatiable import health
         score.draw(gridDisplay)
         timer.draw(gridDisplay)
-        health.draw(gridDisplay)
         # отображение счета на экран
