@@ -1,11 +1,16 @@
+import time
+
 from Scenes.menu_scene import set_scene
 from Scenes.base_scene import Base_scene
 from all_vatiable import packman
 from all_vatiable import map
 from all_vatiable import score
+from all_vatiable import settings
 from Ghost.ghost import end_chasing, minus_life, check, creating_ghosts, ghosts_move_random, move_xy, ghosts_out, \
     gosts_activate
-
+import pygame
+from time import *
+screen = pygame.display.set_mode((1200, 900))
 # Внимание! Есть огромное различие
 # map = Map() - это один определённый объект
 # Map() - при каждом использовонии новый объект
@@ -21,6 +26,10 @@ class Game_scene(Base_scene):
         super().__init__()
         self.out = False
         self.timer = 0
+        self.paused = False
+        self.pause_f1 = pygame.font.SysFont('ubuntu', 150)  # шрифт
+        self.pause_text = self.pause_f1.render("Paused", False,
+                         (255, 255, 255))  # заголовок
 
     def logic(self):
         for sd in map.seeds:  # проверка того, что пакман съедает семку
@@ -55,7 +64,33 @@ class Game_scene(Base_scene):
 
         if ghosts_out(list_ghosts):  # проверка что вышли все призраки
             self.out = True
+        # if self.paused:
+
+    def pause(self):
+        loop = 1
+        self.paused = True
+        while loop:
+            for event in pygame.event.get():
+                screen.blit(self.pause_text, (settings.WINDOW_WIDTH // 2 - self.pause_text.get_rect().w // 2, settings.WINDOW_HEIGHT // 2 - self.pause_text.get_rect().h))
+                if event.type == pygame.QUIT:
+                    loop = 0
+                    self.paused = False
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_p:
+                        loop = 0
+                        self.paused = False
+            pygame.display.update()
+            # screen.fill((0, 0, 0))
+            pygame.time.wait(60)
+
+    def check_for_pause(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                self.pause()
+
 
     def event(self, event):
         packman.event(event)
         self.escape(event)
+        self.check_for_pause(event)
