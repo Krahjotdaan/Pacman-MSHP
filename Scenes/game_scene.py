@@ -6,7 +6,7 @@ from all_vatiable import score
 from all_vatiable import settings
 from all_vatiable import timer
 from Ghost.ghost import end_chasing, minus_life, check, creating_ghosts, ghosts_move_random, move_xy, ghosts_out, \
-    gosts_activate
+    gosts_activate, all_ghosts_eaten
 import pygame
 screen = pygame.display.set_mode((1200, 900))
 
@@ -38,6 +38,7 @@ class Game_scene(Base_scene):
                     map.seeds.remove(sd)
                     score.add_score(10)  # начисление очков за большую семку
                     timer.timer_started = True
+                    timer.start_timer()
                 else:
                     map.seeds.remove(sd)
                     score.add_score(10)  # начисление очков за обычную семку
@@ -49,7 +50,10 @@ class Game_scene(Base_scene):
         if minus_life(packman, list_ghosts, self.is_super_mode) and self.out:
             self.out = False
             self.timer = 0
-
+        if all_ghosts_eaten(list_ghosts):
+            gosts_activate(list_ghosts)
+            self.out = False
+            self.timer = 0
     def draw(self, screen):
         map.visualizeGrid()
         map.draw_seeds()

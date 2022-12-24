@@ -31,11 +31,10 @@ class Ghost:
         self.chasing = False
 
     def draw(self, screen):#отрисовка
-        screen.blit(self.image, [self.rect.top, self.rect.left])
+        if self.is_active:
+            screen.blit(self.image, [self.rect.top, self.rect.left])
     def deactivate(self):
         if self.is_active:
-            self.image = pygame.image.load('Ghost/neghost.png')
-            self.rect = self.image.get_rect()
             self.is_active = False
 
     def step(self):#перемещение на 1 пиксель и подсчет шагов
@@ -314,12 +313,23 @@ def end_chasing(timer, Ghosts):
         return 0
     else:
         return timer
-
+def all_ghosts_eaten(Ghosts):
+    flag = True
+    for j in range(len(Ghosts)):
+        if Ghosts[j].is_active:
+            flag = False
+    if flag:
+        return True
+    else:
+        return False
 def minus_life(pacman, Ghosts, flag):
     for i in range(len(Ghosts)):
         if Ghosts[i].is_active:
             if Ghosts[i].distance(pacman) == 0 and not flag:
                 pacman.damag()
+                # for j in range(len(Ghosts)):
+                #     if Ghosts[j].is_active:
+                #         Ghosts[j].activate()
                 gosts_activate(Ghosts)
                 return True
             if 0 <= Ghosts[i].distance(pacman) <= 1 and flag:
