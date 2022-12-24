@@ -10,11 +10,11 @@ from Ghost.ghost import end_chasing, minus_life, check, creating_ghosts, ghosts_
     gosts_activate
 import pygame
 from time import *
+
 screen = pygame.display.set_mode((1200, 900))
 # Внимание! Есть огромное различие
 # map = Map() - это один определённый объект
 # Map() - при каждом использовонии новый объект
-
 
 
 list_ghosts = creating_ghosts()
@@ -29,7 +29,7 @@ class Game_scene(Base_scene):
         self.paused = False
         self.pause_f1 = pygame.font.SysFont('ubuntu', 150)  # шрифт
         self.pause_text = self.pause_f1.render("Paused", False,
-                         (255, 255, 255))  # заголовок
+                                               (255, 255, 255))  # заголовок
 
     def logic(self):
         for sd in map.seeds:  # проверка того, что пакман съедает семку
@@ -48,6 +48,10 @@ class Game_scene(Base_scene):
         map.visualizeGrid()
         map.draw_seeds()
         packman.draw(screen)
+        # <--------отрисовка изображений жизни-->
+        packman.draw_pac_img(screen)
+        # <------------------------->
+
         if packman.hps():
             set_scene(0)
 
@@ -71,7 +75,8 @@ class Game_scene(Base_scene):
         self.paused = True
         while loop:
             for event in pygame.event.get():
-                screen.blit(self.pause_text, (settings.WINDOW_WIDTH // 2 - self.pause_text.get_rect().w // 2, settings.WINDOW_HEIGHT // 2 - self.pause_text.get_rect().h))
+                screen.blit(self.pause_text, (settings.WINDOW_WIDTH // 2 - self.pause_text.get_rect().w // 2,
+                                              settings.WINDOW_HEIGHT // 2 - self.pause_text.get_rect().h))
                 if event.type == pygame.QUIT:
                     loop = 0
                     self.paused = False
@@ -88,7 +93,6 @@ class Game_scene(Base_scene):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
                 self.pause()
-
 
     def event(self, event):
         packman.event(event)
