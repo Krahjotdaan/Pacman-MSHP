@@ -15,7 +15,7 @@ class Timer():
         self.timer = self.timer_start
     def logic(self):
         self.tick()
-        if self.timer == 0:
+        if self.timer == 0 or self.timer == 1:
             self.timer_started = False
             return False
         else:

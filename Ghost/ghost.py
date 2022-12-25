@@ -1,6 +1,7 @@
 import pygame
 import random
-from Packman.packman import Packman
+from all_vatiable import score
+
 class Settings:
     BACKGROUND_COLOR = pygame.Color('black')
     WINDOW_WIDTH = 1200
@@ -325,14 +326,12 @@ def all_ghosts_eaten(Ghosts):
 def minus_life(pacman, Ghosts, flag):
     for i in range(len(Ghosts)):
         if Ghosts[i].is_active:
-            if Ghosts[i].distance(pacman) == 0 and not flag:
+            if 0 <= Ghosts[i].distance(pacman) <= 1 and not flag:
                 pacman.damag()
-                # for j in range(len(Ghosts)):
-                #     if Ghosts[j].is_active:
-                #         Ghosts[j].activate()
                 gosts_activate(Ghosts)
                 return True
             if 0 <= Ghosts[i].distance(pacman) <= 1 and flag:
+                score.add_score(150)
                 Ghosts[i].deactivate()
                 return False
 
