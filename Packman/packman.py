@@ -1,11 +1,9 @@
 import pygame
 from Map.map import Map
 
-
 # *----------------------------
 player_img = pygame.image.load('Packman/pacmanOpen.png')
 player_mini_img = pygame.transform.scale(player_img, (35, 35))
-#player_mini_img.set_colorkey(BLACK)
 # *----------------------------
 
 
@@ -28,18 +26,13 @@ class Packman:
         text = pygame.font.SysFont('ubuntu', 30).render('Heath: ' + str(self.get_hp()), True, (255, 255, 255))
         screen.blit(text, (425, 170))
 
-    def draw_pac_img(self, screen): # функция отрисовки жизней пакмена
+    def draw_pac_img(self, screen):  # функция отрисовки жизней пакмена
         for i in range(self.get_hp()):
             x_i = 425
             img_rect = player_mini_img.get_rect()
             img_rect.x = x_i + 50 * i
             img_rect.y = 220
             screen.blit(player_mini_img, img_rect)
-
-
-
-
-
 
     def set_angle(self, angle):
         self.angle = 360 - self.angle

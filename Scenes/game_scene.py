@@ -48,7 +48,7 @@ class Game_scene(Base_scene):
         map.visualizeGrid()
         map.draw_seeds()
         packman.draw(screen)
-        # <--------отрисовка изображений жизни-->
+        # <--отрисовка изображений жизни-->
         packman.draw_pac_img(screen)
         # <------------------------->
 
