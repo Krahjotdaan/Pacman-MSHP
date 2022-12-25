@@ -25,11 +25,13 @@ def main():
         packman.damag()
         screen = pygame.display.set_mode([settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT])
         for event in pygame.event.get():
+
             if settings.scene_changed:
                 settings.scene_changed = False
 
             game_over = check_for_quit(event)
-
+            if(event.type == pygame.MOUSEMOTION): # fix bugging mousewheel dash
+                break
             if not settings.scene_changed:
                 scenes[settings.scene_index].event(event)
                 scenes[settings.scene_index].logic()
