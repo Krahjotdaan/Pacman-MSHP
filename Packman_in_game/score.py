@@ -10,6 +10,9 @@ class Score():
     def add_score(self, points):
         self.score += points
 
+    def kostil(self):
+        self.score = 0
+
     def draw(self, gridDisplay):
         sys = pygame.font.SysFont('ubuntu', 30)
         text = sys.render('Your score: ' + str(self.get_score()), True, (255, 255, 255))

@@ -89,9 +89,12 @@ class Packman:
 
     def hps(self):  # проверка на то умер ли пакмен
         from all_vatiable import map
+        from all_vatiable import score
         if self.get_hp() <= 0 or len(map.seeds) == 0:  # смерть пакмена
-            # self.pos = [0, 0]
+            self.pos = [1*30, 4*30]
             self.hp = 3
+            score.kostil()
+            map.seeds_init()
             # self.image = pygame.image.load("Packman/pacmanDead.png").convert()
             return True
         return False
