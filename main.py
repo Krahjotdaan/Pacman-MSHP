@@ -30,7 +30,7 @@ def main():
                 settings.scene_changed = False
 
             game_over = check_for_quit(event)
-            if(event.type == pygame.MOUSEWHEEL): # fix bugging mousewheel dash
+            if(event.type == pygame.MOUSEMOTION): # fix bugging mousewheel dash
                 break
             if not settings.scene_changed:
                 scenes[settings.scene_index].event(event)
