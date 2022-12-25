@@ -55,6 +55,7 @@ class Game_scene(Base_scene):
         if packman.hps():
             set_scene(0)
 
+
         self.timer = end_chasing(self.timer, list_ghosts)
         if minus_life(packman, list_ghosts):
             self.out = False
