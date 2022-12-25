@@ -18,8 +18,10 @@ class Ghost:
         self.steps_matrix = 0 # количество шагов (смещений) по матрице
         self.dir = 0 #направление для рандомного движения
         self.chasing = False
+        self.is_active = False
 
     def activate(self):#возвращение к начальной позиции и настройкам призрака
+        self.is_active = True
         self.rect.top = self.pos[0]
         self.rect.left = self.pos[1]
         self.pos_matrix = [self.pos[0] // 30 + 1, self.pos[1] // 30 + 1]
@@ -29,7 +31,11 @@ class Ghost:
         self.chasing = False
 
     def draw(self, screen):#отрисовка
-        screen.blit(self.image, [self.rect.top, self.rect.left])
+        if self.is_active:
+            screen.blit(self.image, [self.rect.top, self.rect.left])
+    def deactivate(self):
+        if self.is_active:
+            self.is_active = False
 
     def step(self):#перемещение на 1 пиксель и подсчет шагов
         self.rect.top += self.shift[0]
@@ -155,7 +161,7 @@ class Ghost:
         else:
             dirs.append(0)
 
-        if (change_dir or len(dirs)==3):
+        if change_dir or (len(dirs)==3 and not self.chasing):
             self.draw(screen)
             index_dir = random.randint(0, len(dirs)-1)
             if dirs[index_dir] == 1:
@@ -199,8 +205,10 @@ class Ghost:
     def distance(self, pacman):
         delta_x = self.rect.top - pacman.pos[0]
         delta_y = self.rect.left - pacman.pos[1]
-        return int(((abs(delta_x))**2+(abs(delta_y))**2)**0.5)
-
+        if self.is_active:
+            return int(((abs(delta_x))**2+(abs(delta_y))**2)**0.5)
+        else:
+            return 1000000000
     def distance_x(self, pacman):
         return abs(self.rect.top - pacman.pos[0])
 
@@ -289,7 +297,7 @@ def check(Ghosts, pacman, map, timer):
         if Ghosts[i].distance(pacman) < min_dist:
             min_dist = Ghosts[i].distance(pacman)
             min_index = i
-    if min_dist <= 500 or Ghosts[min_index].chasing:
+    if min_dist <= 120 or Ghosts[min_index].chasing:
         Ghosts[0].dir = Ghosts[0].chase(pacman, map)
         Ghosts[1].dir = Ghosts[1].chase(pacman, map)
         Ghosts[2].dir = Ghosts[2].chase(pacman, map)
@@ -305,13 +313,27 @@ def end_chasing(timer, Ghosts):
         return 0
     else:
         return timer
-
-def minus_life(pacman, Ghosts):
+def all_ghosts_eaten(Ghosts):
+    flag = True
+    for j in range(len(Ghosts)):
+        if Ghosts[j].is_active:
+            flag = False
+    if flag:
+        return True
+    else:
+        return False
+def minus_life(pacman, Ghosts, flag):
     for i in range(len(Ghosts)):
-        if Ghosts[i].distance(pacman) >= 0 and Ghosts[i].distance(pacman) <= 1:
-            pacman.damag()
-            for j in range(len(Ghosts)):
-                Ghosts[j].activate()
-            return True
+        if Ghosts[i].is_active:
+            if Ghosts[i].distance(pacman) == 0 and not flag:
+                pacman.damag()
+                # for j in range(len(Ghosts)):
+                #     if Ghosts[j].is_active:
+                #         Ghosts[j].activate()
+                gosts_activate(Ghosts)
+                return True
+            if 0 <= Ghosts[i].distance(pacman) <= 1 and flag:
+                Ghosts[i].deactivate()
+                return False
 
 

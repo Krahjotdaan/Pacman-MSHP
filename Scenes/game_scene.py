@@ -1,17 +1,15 @@
-import time
-
 from Scenes.menu_scene import set_scene
 from Scenes.base_scene import Base_scene
 from all_vatiable import packman
 from all_vatiable import map
 from all_vatiable import score
 from all_vatiable import settings
+from all_vatiable import timer
 from Ghost.ghost import end_chasing, minus_life, check, creating_ghosts, ghosts_move_random, move_xy, ghosts_out, \
-    gosts_activate
+    gosts_activate, all_ghosts_eaten
 import pygame
-from time import *
-
 screen = pygame.display.set_mode((1200, 900))
+
 # Внимание! Есть огромное различие
 # map = Map() - это один определённый объект
 # Map() - при каждом использовонии новый объект
@@ -26,6 +24,7 @@ class Game_scene(Base_scene):
         super().__init__()
         self.out = False
         self.timer = 0
+        self.is_super_mode = False
         self.paused = False
         self.pause_f1 = pygame.font.SysFont('ubuntu', 150)  # шрифт
         self.pause_text = self.pause_f1.render("Paused", False,
@@ -38,12 +37,23 @@ class Game_scene(Base_scene):
                 if sd.is_super == True:
                     map.seeds.remove(sd)
                     score.add_score(10)  # начисление очков за большую семку
+                    timer.timer_started = True
+                    timer.start_timer()
                 else:
                     map.seeds.remove(sd)
                     score.add_score(10)  # начисление очков за обычную семку
 
         packman.logic(map.matrix)
 
+        if timer.timer_started:
+            self.is_super_mode = timer.logic()
+        if minus_life(packman, list_ghosts, self.is_super_mode) and self.out:
+            self.out = False
+            self.timer = 0
+        if all_ghosts_eaten(list_ghosts):
+            gosts_activate(list_ghosts)
+            self.out = False
+            self.timer = 0
     def draw(self, screen):
         map.visualizeGrid()
         map.draw_seeds()
@@ -55,10 +65,7 @@ class Game_scene(Base_scene):
         if packman.hps():
             set_scene(0)
 
-
         self.timer = end_chasing(self.timer, list_ghosts)
-        if minus_life(packman, list_ghosts):
-            self.out = False
 
         if self.out:  # если все призраки вышли
             self.timer = check(list_ghosts, packman, map, self.timer)
@@ -69,7 +76,6 @@ class Game_scene(Base_scene):
 
         if ghosts_out(list_ghosts):  # проверка что вышли все призраки
             self.out = True
-        # if self.paused:
 
     def pause(self):
         loop = 1
