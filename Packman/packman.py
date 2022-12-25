@@ -6,7 +6,6 @@ player_img = pygame.image.load('Packman/pacmanOpen.png')
 player_mini_img = pygame.transform.scale(player_img, (35, 35))
 # *----------------------------
 
-
 class Packman:
     def __init__(self, pos, shift, filename, hp):
         self.hp = hp  # кол-во жизней
